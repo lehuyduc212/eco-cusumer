@@ -370,8 +370,42 @@ const BanHang = () => {
     setOosQueue([]);
     setOosProduct(null);
     setTransferProduct(null);
-    // Note: We might want to keep sessionHistory for the review action, 
-    // but clear the current active cart.
+    setLastActionType('NONE');
+  };
+
+  const handleConfirmFinalReset = async () => {
+    setAiState(AI_STATE.PROCESSING);
+    addStep("Đang đóng phiên giao diện và lưu trữ hồ sơ...");
+    await delay(1200);
+    
+    resetSession();
+    setProcessSteps([]); // Clear all previous steps for the new session
+    setAiState(AI_STATE.DONE);
+    
+    addStep(
+      <div className="new-session-welcome fade-in">
+         <div className="welcome-header">
+            <Sparkles size={24} className="text-blue-500" />
+            <h3>Phiên làm việc mới</h3>
+         </div>
+         <p>Em đã sẵn sàng! Anh/Chị muốn thực hiện nghiệp vụ gì tiếp theo ạ?</p>
+         <div className="session-start-ctas mt-4">
+            <button className="start-cta-btn" onClick={() => handleMicClick()}>
+               <Mic size={18} /> Bán hàng bằng giọng nói
+            </button>
+            <div className="cta-grid-2">
+               <button className="start-cta-sub" onClick={() => handleInventoryReport()}>
+                  <Database size={14} /> Kiểm kho
+               </button>
+               <button className="start-cta-sub" onClick={() => addStep("Tính năng báo cáo đang được tải...", 'done')}>
+                  <BarChart2 size={14} /> Báo cáo
+               </button>
+            </div>
+         </div>
+      </div>,
+      'result',
+      'welcome'
+    );
   };
 
   const handleManualReset = async () => {

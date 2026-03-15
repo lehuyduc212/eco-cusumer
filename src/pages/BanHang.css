@@ -4207,3 +4207,88 @@ body.ai-expanded {
   font-style: italic;
   margin-top: 2px;
 }
+
+/* --- NEW SESSION WELCOME CARD --- */
+.new-session-welcome {
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  text-align: center;
+  margin: 10px 0;
+}
+
+.welcome-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.welcome-header h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: #1E293B;
+}
+
+.new-session-welcome p {
+  color: #64748B;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.session-start-ctas {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.start-cta-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #3B82F6, #2563EB);
+  color: white;
+  border-radius: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: none;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+  transition: all 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+.start-cta-btn:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.1);
+}
+
+.cta-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.start-cta-sub {
+  padding: 12px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  color: #475569;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.start-cta-sub:active {
+  background: #F1F5F9;
+  transform: translateY(1px);
+}
