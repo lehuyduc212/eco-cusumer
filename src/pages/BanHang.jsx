@@ -373,6 +373,71 @@ const BanHang = () => {
     setLastActionType('NONE');
   };
 
+  const handlePrintStrategicLabels = async (productName) => {
+    setAiState(AI_STATE.PROCESSING);
+    addStep(`Đang kết nối máy in Bluetooth "ECO-PRINTER"...`);
+    await delay(1000);
+    updateLastStep('done');
+
+    addStep(
+      <div className="label-preview-box fade-in">
+        <Printer size={20} className="text-yellow-600 mb-2" />
+        <small className="text-yellow-700 font-bold uppercase">Bản xem trước Tem Xả kho</small>
+        <div className="label-mockup mt-2">
+          <b>{productName}</b>
+          <div className="mock-old-price">Giá cũ: 15.000đ</div>
+          <div className="mock-price">12.750đ</div>
+          <small>Hạn dùng: 30/03/2026</small>
+        </div>
+        <div className="printing-status-bar">
+          <div className="status-progress-bar"></div>
+        </div>
+        <p className="text-xs text-slate-500 mt-2">Đang in 150 tem...</p>
+      </div>, 'result'
+    );
+    await delay(2500);
+    setAiState(AI_STATE.DONE);
+  };
+
+  const handleProformaInvoice = async (productName) => {
+    setAiState(AI_STATE.PROCESSING);
+    addStep(`Đang trích xuất dữ liệu tồn kho & giá trị pro-forma...`);
+    await delay(1200);
+    updateLastStep('done');
+
+    addStep(
+      <div className="proforma-invoice fade-in">
+        <div className="invoice-stub-header">
+           <b>PHIẾU TẠM TÍNH XẢ KHO</b>
+           <br/><small>Dự toán Giải phóng vốn</small>
+        </div>
+        <div className="invoice-body">
+           <div className="invoice-item-line">
+              <span>{productName} x 150</span>
+              <span>1.912.500</span>
+           </div>
+           <div className="invoice-item-line">
+              <span>Thuế (1.5%)</span>
+              <span>28.687</span>
+           </div>
+           <div className="invoice-total-line">
+              <span>TỔNG THU DỰ KIẾN</span>
+              <span>1.941.187đ</span>
+           </div>
+        </div>
+        <p className="mt-4 text-[10px] text-slate-400 italic text-center">
+           * Phiếu dùng cho báo cáo nội bộ
+        </p>
+      </div>, 'result'
+    );
+    setAiState(AI_STATE.DONE);
+  };
+
+  const handleCloseStrategicAdvice = () => {
+    addStep("Dạ, em đã lưu lại các gợi ý này. Anh/Chị có thể xem lại trong Dashboard bất cứ lúc nào ạ.", 'result');
+    setAiState(AI_STATE.DONE);
+  };
+
   const handleClearanceStrategy = async (productName, stockCount) => {
     setAiState(AI_STATE.PROCESSING);
     addStep(`Đang phân tích dữ liệu tồn kho cho ${productName}...`);
@@ -396,10 +461,13 @@ const BanHang = () => {
           <button className="strategy-btn primary" onClick={() => handleApplyStrategicDiscount(productName, 15)}>
             <Percent size={16} /> Áp dụng Giảm giá 15%
           </button>
-          <button className="strategy-btn secondary" onClick={() => addStep("Đang kết nối máy in Bluetooth để in tem...", 'done')}>
+          <button className="strategy-btn secondary" onClick={() => handlePrintStrategicLabels(productName)}>
             <Printer size={16} /> In tem "Xả kho - Giá sốc"
           </button>
-          <button className="strategy-btn secondary" onClick={() => setAiState(AI_STATE.DONE)}>
+          <button className="strategy-btn secondary" onClick={() => handleProformaInvoice(productName)}>
+            <FileText size={16} /> In Tạm tính (Pro-forma)
+          </button>
+          <button className="strategy-btn secondary" onClick={() => handleCloseStrategicAdvice()}>
             <X size={16} /> Để sau
           </button>
         </div>
@@ -428,17 +496,36 @@ const BanHang = () => {
         </div>
 
         <div className="strategy-actions">
-          <button className="strategy-btn primary" onClick={() => simulateProcessing(`Bán giỏ quà gồm ${productName} và Nho mẫu đơn`)}>
+          <button className="strategy-btn primary" onClick={() => handleCreateComboStrategy(productName)}>
             <Gift size={16} /> Tạo Combo Quà tặng (Upsell)
           </button>
-          <button className="strategy-btn secondary" onClick={() => addStep("Vị trí 'Kệ trung tâm' đã được đánh dấu ưu tiên.", 'done')}>
+          <button className="strategy-btn secondary" onClick={() => {
+            addStep("Vị trí 'Kệ trung tâm' đã được đánh dấu ưu tiên trên Bản đồ Nhiệt.", 'done');
+            setAiState(AI_STATE.DONE);
+          }}>
             <Layout size={16} /> Đánh dấu Vị trí Chiến lược
           </button>
-          <button className="strategy-btn secondary" onClick={() => setAiState(AI_STATE.DONE)}>
+          <button className="strategy-btn secondary" onClick={() => handleCloseStrategicAdvice()}>
              Bỏ qua
           </button>
         </div>
       </div>, 'result', 'consultant'
+    );
+    setAiState(AI_STATE.DONE);
+  };
+
+  const handleCreateComboStrategy = async (productName) => {
+    setAiState(AI_STATE.PROCESSING);
+    addStep(`Đang phân tích khả năng phối hợp mặt hàng cho ${productName}...`);
+    await delay(1000);
+    updateLastStep('done');
+    
+    addStep(
+      <div className="tax-optimization-success premium-glass fade-in">
+         <Sparkles size={24} className="text-blue-500" />
+         <h4>Đã tạo Combo Chiến lược!</h4>
+         <p>Combo [<b>{productName}</b> + Giỏ tre + Nho] đã được thêm vào mục Đề xuất bán lẻ.</p>
+      </div>, 'result'
     );
     setAiState(AI_STATE.DONE);
   };
@@ -1167,7 +1254,7 @@ const BanHang = () => {
     addStep(
       <div className="tax-optimization-success premium-glass fade-in">
          <div className="flex-center gap-2">
-            <CheckCircle2 size={24} className="text-green-500 animate-bounce" />
+            {/* <CheckCircle2 size={24} className="text-green-500 animate-bounce" /> */}
             <h4 className="m-0">Tối ưu Thành công!</h4>
          </div>
          <p className="mt-2 mb-4">Hoá đơn đã được tách dòng để áp thuế <b>1.5%</b>.</p>

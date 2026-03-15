@@ -4301,6 +4301,7 @@ body.ai-expanded {
 .tile-success { border-left: 4px solid #10B981; }
 .tile-info { border-left: 4px solid #3B82F6; }
 .tile-amber { border-left: 4px solid #F59E0B; }
+.tile-indigo { border-left: 4px solid #6366F1; }
 
 /* Dashboard Timeline */
 .strategic-timeline-box {
@@ -4608,4 +4609,96 @@ body.ai-expanded {
 
 .strategy-btn:active {
   transform: scale(0.97);
+}
+
+/* --- DEEP STRATEGIC PREVIEWS --- */
+.label-preview-box {
+  background: #FEFCE8;
+  border: 1px dashed #EAB308;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.label-mockup {
+  background: white;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #E2E8F0;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+}
+
+.label-mockup b {
+  display: block;
+  font-size: 16px;
+  color: #000;
+}
+
+.label-mockup .mock-price {
+  font-size: 24px;
+  font-weight: 900;
+  color: #EF4444;
+}
+
+.label-mockup .mock-old-price {
+  text-decoration: line-through;
+  font-size: 12px;
+  color: #94A3B8;
+}
+
+.proforma-invoice {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 20px;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.invoice-stub-header {
+  border-bottom: 2px dashed #CBD5E1;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.invoice-item-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.invoice-total-line {
+  border-top: 2px dashed #CBD5E1;
+  margin-top: 15px;
+  padding-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+}
+
+.printing-status-bar {
+  height: 4px;
+  background: #E2E8F0;
+  border-radius: 2px;
+  margin-top: 12px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.status-progress-bar {
+  height: 100%;
+  background: #2563EB;
+  width: 0%;
+  animation: progressPulse 2.5s infinite linear;
+}
+
+@keyframes progressPulse {
+  0% { width: 0%; }
+  100% { width: 100%; }
 }
