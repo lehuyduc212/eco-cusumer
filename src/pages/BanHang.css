@@ -4081,3 +4081,32 @@ body.ai-expanded {
 .opt-apply-btn.flex-1:hover {
   background: #1D4ED8;
 }
+
+/* --- PHASE 22: ELITE UX & ANIMATIONS --- */
+
+.mini-receipt {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  margin-top: 12px;
+  transform: scale(0.98);
+}
+
+.tax-success-anim {
+  animation: tax-reveal 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+  background: rgba(34, 197, 94, 0.1);
+  border-radius: 8px;
+  padding: 4px 8px !important;
+  margin: 4px -8px !important;
+}
+
+@keyframes tax-reveal {
+  0% { transform: scale(0.9); opacity: 0; filter: blur(4px); }
+  50% { background: rgba(34, 197, 94, 0.3); transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; filter: blur(0); }
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

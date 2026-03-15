@@ -814,7 +814,7 @@ const BanHang = () => {
     addStep("Đang tạo nghiệp vụ đóng gói & áp mã thuế lẻ...");
     await delay(1000);
     
-    // Add Packaging Fee (Service 7.5%)
+    // Create the packaging fee item
     const packagingFee = {
       id: `fee-${Date.now()}`,
       name: "Phí đóng gói & Giỏ quà linh hoạt",
@@ -823,7 +823,9 @@ const BanHang = () => {
       taxCategory: 'SERVICE'
     };
     
-    setActiveCart(prev => [...prev, packagingFee]);
+    // We calculate the new cart locally to render it immediately in the UI
+    const updatedCart = [...activeCart, packagingFee];
+    setActiveCart(updatedCart);
     
     setSessionHistory(prev => [{
       timestamp: new Date().toLocaleTimeString(),
@@ -831,12 +833,39 @@ const BanHang = () => {
       details: 'Chuyển đổi -> Hàng lẻ (1.5%) + Phí đóng gói (7.5%)'
     }, ...prev]);
 
+    const totalAmount = updatedCart.reduce((sum, i) => sum + (i.price * (i.quantity || 1)), 0);
+    const totalTax = updatedCart.reduce((sum, i) => sum + (i.price * i.quantity * TAX_RATES[i.taxCategory]), 0);
+
     updateLastStep('done');
     addStep(
       <div className="tax-optimization-success premium-glass fade-in">
-         <CheckCircle2 size={24} className="text-green-500" />
-         <h4>Đã chuyển đổi thành Giỏ quà Tối ưu!</h4>
-         <p>Hệ thống đã tự động bóc tách doanh thu hàng hóa và dịch vụ để kê khai mức thuế thấp nhất cho Anh/Chị.</p>
+         <div className="flex-center gap-2">
+            <CheckCircle2 size={24} className="text-green-500 animate-bounce" />
+            <h4 className="m-0">Tối ưu Thành công!</h4>
+         </div>
+         <p className="mt-2 mb-4">Hoá đơn đã được tách dòng để áp thuế <b>1.5%</b>.</p>
+         
+         <div className="receipt-card mini-receipt">
+            <div className="rc-body">
+               {updatedCart.map((item, idx) => (
+                  <div className="rc-line-group" key={`opt-${item.id}-${idx}`}>
+                    <div className="rc-line">
+                      <span>{item.name} <strong>x{item.quantity || 1}</strong></span>
+                      <span>{(item.price * (item.quantity || 1)).toLocaleString()}₫</span>
+                    </div>
+                  </div>
+               ))}
+               <div className="rc-divider"></div>
+               <div className="rc-tax-summary tax-success-anim">
+                  <span>Ước tính thuế tối ưu:</span>
+                  <strong className="text-green-600">-{totalTax.toLocaleString()}₫</strong>
+               </div>
+               <div className="rc-total mt-1">
+                  <span>Tổng thanh toán</span>
+                  <span className="total-val">{totalAmount.toLocaleString()}₫</span>
+               </div>
+            </div>
+         </div>
       </div>, 'result'
     );
     setAiState(AI_STATE.DONE);
