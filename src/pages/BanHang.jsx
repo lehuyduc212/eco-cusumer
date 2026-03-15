@@ -2538,7 +2538,7 @@ const BanHang = () => {
           {showNudge && (
             <div className="ai-nudge fade-in-left">
               <span className="nudge-text" onClick={() => { setIsExpanded(true); simulateProcessing("Kiểm tra tồn kho cho tôi"); setShowNudge(false); }}>
-                Kiểm kho ngay? <Sparkles size={12} />
+                Kiểm kho ngay?
               </span>
               <button className="nudge-close" onClick={() => setShowNudge(false)}><X size={10} /></button>
             </div>
