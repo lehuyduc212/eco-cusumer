@@ -376,7 +376,7 @@ const BanHang = () => {
     );
     await delay(400);
 
-    resetSession();
+    // REMOVED: resetSession() - Delaying until manually finished or full flow done
     setAiState(AI_STATE.SUCCESS);
     await delay(1000);
     handleLedgerFlow();
@@ -399,6 +399,11 @@ const BanHang = () => {
            <div className="ledger-row"><span>Thuế GTGT (8%):</span><span>6.000₫</span></div>
            <div className="ledger-row"><span>Trạng thái:</span><span className="verify-badge">ĐÃ XÁC THỰC</span></div>
         </div>
+         <div className="ledger-footer mt-4">
+            <button className="finish-session-btn" onClick={() => handleConfirmFinalReset()}>
+               Hoàn tất phiên & Sang đơn mới <RotateCcw size={14} />
+            </button>
+         </div>
       </div>,
       'result',
       'ledger'

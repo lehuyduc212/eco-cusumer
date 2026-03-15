@@ -4138,3 +4138,39 @@ body.ai-expanded {
 
 .rc-btn-primary:hover { background: #059669; }
 .rc-btn-secondary:hover { background: #E2E8F0; }
+
+.finish-session-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #1E293B, #0F172A);
+  color: white;
+  border: none;
+  border-radius: 18px;
+  font-size: 14px;
+  font-weight: 850;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 10px 20px -5px rgba(15, 23, 42, 0.3);
+}
+
+.finish-session-btn:hover {
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 0 15px 30px -10px rgba(15, 23, 42, 0.4);
+  background: linear-gradient(135deg, #334155, #1E293B);
+}
+
+.finish-session-btn:active {
+  transform: translateY(-1px) scale(0.99);
+}
+
+.finish-session-btn svg {
+  transition: transform 0.6s ease;
+}
+
+.finish-session-btn:hover svg {
+  transform: rotate(180deg);
+}
