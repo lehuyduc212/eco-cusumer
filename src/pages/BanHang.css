@@ -4228,6 +4228,7 @@ body.ai-expanded {
   font-weight: 800;
   background: linear-gradient(135deg, #1E293B, #334155);
   -webkit-background-clip: text;
+  background-clip: text;
   color: transparent;
   margin: 0;
 }
