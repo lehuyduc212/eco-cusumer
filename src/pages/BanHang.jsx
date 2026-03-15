@@ -135,6 +135,7 @@ const BanHang = () => {
 
   // NEW: Reporting States
   const [showReportNudge, setShowReportNudge] = useState(true);
+  const [isEditingCart, setIsEditingCart] = useState(false); 
 
   // Background scroll lock
   useEffect(() => {
