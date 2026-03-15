@@ -3527,7 +3527,8 @@ body.ai-expanded {
 
 .tax-main-summary {
   display: flex;
-  gap: 20px;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .summary-item {
