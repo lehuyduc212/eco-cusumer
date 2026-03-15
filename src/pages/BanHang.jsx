@@ -456,7 +456,42 @@ const BanHang = () => {
           </div>
         </div>
 
-        <div className="session-start-ctas mt-6">
+        {/* Legacy Quick CTAs */}
+        <div className="onboarding-suggestions mt-10">
+          <p className="suggestion-label mb-3">Thao tác nhanh:</p>
+          <div className="suggestion-grid">
+            <div className="suggest-card-premium" onClick={() => simulateProcessing("Bán cho khách 2 vỉ trứng gà")}>
+              <div className="suggest-icon bg-blue-50 text-blue-600"><ShoppingBag size={18} /></div>
+              <div className="suggest-info">
+                <p>Bán hàng</p>
+                <span>"Bán 2 vỉ trứng"</span>
+              </div>
+            </div>
+            <div className="suggest-card-premium" onClick={() => handleInventoryReport()}>
+              <div className="suggest-icon bg-orange-50 text-orange-600"><BarChart2 size={18} /></div>
+              <div className="suggest-info">
+                <p>Tồn kho</p>
+                <span>"Kiểm tra kho"</span>
+              </div>
+            </div>
+            <div className="suggest-card-premium" onClick={() => simulateProcessing("Cho tôi xem lịch sử")}>
+              <div className="suggest-icon bg-green-50 text-green-600"><Clock size={18} /></div>
+              <div className="suggest-info">
+                <p>Lịch sử</p>
+                <span>"Lịch sử đơn"</span>
+              </div>
+            </div>
+            <div className="suggest-card-premium" onClick={() => handleStockTransfer()}>
+              <div className="suggest-icon bg-blue-50 text-blue-600"><Truck size={18} /></div>
+              <div className="suggest-info">
+                <p>Điều chuyển</p>
+                <span>"Chuyển kho 20 táo"</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="session-start-ctas mt-8">
            <button className="start-cta-btn" onClick={() => handleMicClick()}>
               <Mic size={18} /> Bán hàng bằng giọng nói
            </button>
