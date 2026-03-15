@@ -101,7 +101,7 @@ const MOCK_DB = [
     stock: 30, 
     price: 250000, 
     category: "Thực phẩm tươi", 
-    keywords: ["nho", "mẫu đơn", "nho xanh", "nhau"], 
+    keywords: ["nho", "mẫu đơn", "nho xanh", "nhau", "nho mẩu đơn", "nho mẫu"], 
     taxCategory: 'RETAIL' 
   },
   { 
@@ -731,10 +731,12 @@ const BanHang = () => {
       setPendingOrder([]);
       setLastActionType('SALE_SUCCESS');
       setAiState(AI_STATE.DONE);
+      return newCart; // Return snapshot for async flows
     } catch (error) {
       console.error("Order Flow Error:", error);
       addStep("Dạ, có lỗi xảy ra khi xử lý giỏ hàng. Em đã đưa hệ thống về trạng thái an toàn.", 'result', 'error');
       setAiState(AI_STATE.DONE);
+      return [];
     }
   };
 
@@ -828,8 +830,9 @@ const BanHang = () => {
     setAiState(AI_STATE.DONE);
   };
 
-  const handleDynamicWrapping = async () => {
-    if (activeCart.length === 0) {
+  const handleDynamicWrapping = async (cartSnapshot = null) => {
+    const cartToWrap = cartSnapshot || activeCart;
+    if (cartToWrap.length === 0) {
       addStep("Dạ, giỏ hàng đang trống. Anh/Chị vui lòng chọn sản phẩm trước khi yêu cầu đóng giỏ quà nhé!", 'result', 'info');
       return setAiState(AI_STATE.DONE);
     }
@@ -839,8 +842,8 @@ const BanHang = () => {
     await delay(1200);
     updateLastStep('done');
 
-    const fruitItems = activeCart.filter(item => item.category === "Thực phẩm tươi" || item.category === "Lương thực");
-    const giftItems = activeCart.filter(item => item.category === "Bánh kẹo" || item.category === "Gia vị");
+    const fruitItems = cartToWrap.filter(item => item.category === "Thực phẩm tươi" || item.category === "Lương thực");
+    const giftItems = cartToWrap.filter(item => item.category === "Bánh kẹo" || item.category === "Gia vị");
     
     addStep(
       <div className="dynamic-wrap-card premium-glass fade-in">
@@ -849,7 +852,7 @@ const BanHang = () => {
             <span>Trí tuệ Bán hàng AI: Tối ưu Giỏ quà</span>
          </div>
          <div className="opt-content mt-2">
-            <p>Dạ em nhận lệnh! Em sẽ giúp mình đóng <b>{activeCart.length} mặt hàng</b> này thành giỏ quà chuyên nghiệp.</p>
+            <p>Dạ em nhận lệnh! Em sẽ giúp mình đóng <b>{cartToWrap.length} mặt hàng</b> này thành giỏ quà chuyên nghiệp.</p>
             <div className="opt-advice bg-blue-50/50 p-3 rounded-xl mt-3 border border-blue-100">
                <p className="text-[12px] text-blue-800 leading-normal">
                  💡 <b>Mẹo tối ưu:</b> Nếu lên đơn là "Dịch vụ giỏ quà", mình sẽ chịu <b>7.5% thuế</b> trên toàn bộ giá trị. 
@@ -859,18 +862,18 @@ const BanHang = () => {
             <div className="opt-compare mt-3">
                <div className="compare-item">
                   <small>Thuế cũ (7.5%)</small>
-                  <strong className="text-red-500">{(activeCart.reduce((sum, item) => sum + (item.price * item.quantity), 0) * 0.075).toLocaleString()}₫</strong>
+                  <strong className="text-red-500">{(cartToWrap.reduce((sum, item) => sum + (item.price * item.quantity), 0) * 0.075).toLocaleString()}₫</strong>
                </div>
                <ArrowRight size={14} className="opacity-40" />
                <div className="compare-item">
                   <small>Thuế sau Tối ưu</small>
-                  <strong className="text-green-600">{(activeCart.reduce((sum, item) => sum + (item.price * item.quantity * 0.015), 0) + (80000 * 0.075)).toLocaleString()}₫</strong>
+                  <strong className="text-green-600">{(cartToWrap.reduce((sum, item) => sum + (item.price * item.quantity * 0.015), 0) + (80000 * 0.075)).toLocaleString()}₫</strong>
                </div>
             </div>
          </div>
          <div className="opt-actions-row mt-4">
             <button className="opt-secondary-btn" onClick={() => setAiState(AI_STATE.DONE)}>Để sau</button>
-            <button className="opt-apply-btn flex-1" onClick={() => executeDynamicWrap()}>
+            <button className="opt-apply-btn flex-1" onClick={() => executeDynamicWrap(cartToWrap)}>
                <Gift size={14} /> Chốt Giỏ quà Tối ưu
             </button>
          </div>
@@ -879,7 +882,7 @@ const BanHang = () => {
     setAiState(AI_STATE.DONE);
   };
 
-  const executeDynamicWrap = async () => {
+  const executeDynamicWrap = async (cartToWrap = activeCart) => {
     setAiState(AI_STATE.PROCESSING);
     addStep("Đang tạo nghiệp vụ đóng gói & áp mã thuế lẻ...");
     await delay(1000);
@@ -894,7 +897,7 @@ const BanHang = () => {
     };
     
     // We calculate the new cart locally to render it immediately in the UI
-    const updatedCart = [...activeCart, packagingFee];
+    const updatedCart = [...cartToWrap, packagingFee];
     setActiveCart(updatedCart);
     
     setSessionHistory(prev => [{
@@ -1357,67 +1360,21 @@ const BanHang = () => {
     await delay(1000);
     updateLastStep('done');
 
-    // Identify ALL items mentioned with potential quantities
-    // NEW: Exclusive Range Consumption (prevents "mì" from matching inside "bánh mì")
+    // REDESIGNED: Multi-Item Segmented Parsing (Highly Robust)
+    const segments = lowerText.split(/,| và |\. | rồi /);
     const detected = [];
-    const normalizedText = lowerText.replace(/[.,!?]/g, " ");
-    const consumedRanges = [];
-
-    // 1. Index all searchable items (including nested items if any)
-    const allKeywords = [];
-    MOCK_DB.forEach(item => {
-      item.keywords.forEach(kw => {
-        allKeywords.push({ item, kw, length: kw.length });
-      });
-    });
-    // Ensure we also search for partial matches or names if no keyword matches
-    allKeywords.sort((a, b) => b.length - a.length);
-
-    // 2. Consume ranges for matches
-    allKeywords.forEach(({ item, kw }) => {
-      // Find occurrences. We now use a more flexible word boundary for Vietnamese
-      const regex = new RegExp(`(^|\\s|\\d)${kw}(\\s|$|\\d)`, 'gi');
-      let m;
-      while ((m = regex.exec(normalizedText)) !== null) {
-        let startIdx = m.index;
-        let endIdx = m.index + m[0].length;
-        
-        // Adjust indices to remove potential surrounding chars from the match range
-        if (m[1]) startIdx += m[1].length;
-        if (m[2]) endIdx -= m[2].length;
-
-        const isOverlapping = consumedRanges.some(range => 
-          (startIdx >= range.start && startIdx < range.end) || 
-          (endIdx > range.start && endIdx <= range.end)
-        );
-
-        if (!isOverlapping) {
-          consumedRanges.push({ start: startIdx, end: endIdx });
-          
-          // QUANTITY ASSOCIATION: Improved window context
-          const contextStart = Math.max(0, startIdx - 35);
-          const contextEnd = Math.min(lowerText.length, endIdx + 15);
-          const window = lowerText.substring(contextStart, contextEnd);
-          const qty = parseVietnameseQuantity(window);
-
-          const existing = detected.find(d => d.id === item.id);
-          if (!existing) {
-            detected.push({ ...item, detectedQty: qty });
-          }
-        }
+    
+    segments.forEach(segment => {
+      const segQty = parseVietnameseQuantity(segment);
+      // Find the best match in this specific segment
+      const match = MOCK_DB.find(item => 
+         item.keywords.some(k => segment.includes(k.toLowerCase())) || 
+         segment.includes(item.name.toLowerCase())
+      );
+      if (match) {
+         detected.push({ ...match, detectedQty: segQty || 1 });
       }
     });
-
-    // 2b. Fallback: Check if item names are mentioned directly if no keywords triggered
-    if (detected.length === 0) {
-       MOCK_DB.forEach(item => {
-          if (normalizedText.includes(item.name.toLowerCase())) {
-             detected.push({ ...item, detectedQty: parseVietnameseQuantity(normalizedText) });
-          }
-       });
-    }
-
-    // Sort detected items by their appearance in the text (optional but helps UX)
 
     if (detected.length > 0) {
       setPendingOrder(detected);
@@ -1500,11 +1457,11 @@ const BanHang = () => {
         return handleOOSFlow(firstOos.name);
       } else {
         // All items in stock - proceed normally
-        await finalizeOrderFlow(detected);
+        const cartSnapshot = await finalizeOrderFlow(detected);
         
         // POST-DETECTION: Check if the user ALSO wanted to wrap/pack this
         if (lowerText.includes('gói quà') || lowerText.includes('giỏ quà') || lowerText.includes('đóng giỏ') || lowerText.includes('giỏi')) {
-           return handleDynamicWrapping();
+           return handleDynamicWrapping(cartSnapshot);
         }
         return;
       }
