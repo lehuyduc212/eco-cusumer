@@ -114,6 +114,26 @@ const MOCK_DB = [
     keywords: ["phí đóng gói", "công gói", "giỏ quà", "gói quà"], 
     taxCategory: 'SERVICE' 
   },
+  { 
+    id: 54, 
+    name: "Giỏ tre mây & Phụ kiện", 
+    emoji: "🧺", 
+    stock: 999, 
+    price: 50000, 
+    category: "Vật tư", 
+    keywords: ["giỏ tre", "giỏ mây", "vật liệu gói"], 
+    taxCategory: 'RETAIL' 
+  },
+  { 
+    id: 55, 
+    name: "Công đóng gói nghệ thuật", 
+    emoji: "✍️", 
+    stock: 999, 
+    price: 30000, 
+    category: "Dịch vụ", 
+    keywords: ["công đóng", "nhận công"], 
+    taxCategory: 'SERVICE' 
+  },
   // Previous Combo Items now referenced as individual entries
   { 
     id: 50, 
@@ -127,7 +147,8 @@ const MOCK_DB = [
     comboItems: [
       { id: 51, name: "Táo Envy 1kg", price: 120000, taxCategory: 'RETAIL' },
       { id: 52, name: "Nho mẫu đơn 500g", price: 250000, taxCategory: 'RETAIL' },
-      { id: 53, name: "Phí dịch vụ & Gói quà", price: 80000, taxCategory: 'SERVICE' }
+      { id: 54, name: "Giỏ tre mây & Phụ kiện", price: 50000, taxCategory: 'RETAIL' },
+      { id: 55, name: "Công đóng gói nghệ thuật", price: 30000, taxCategory: 'SERVICE' }
     ]
   },
 ];
@@ -867,7 +888,7 @@ const BanHang = () => {
                <ArrowRight size={14} className="opacity-40" />
                <div className="compare-item">
                   <small>Thuế sau Tối ưu</small>
-                  <strong className="text-green-600">{(cartToWrap.reduce((sum, item) => sum + (item.price * item.quantity * 0.015), 0) + (80000 * 0.075)).toLocaleString()}₫</strong>
+                  <strong className="text-green-600">{(cartToWrap.reduce((sum, item) => sum + (item.price * item.quantity * 0.015), 0) + (50000 * 0.015) + (30000 * 0.075)).toLocaleString()}₫</strong>
                </div>
             </div>
          </div>
@@ -887,17 +908,23 @@ const BanHang = () => {
     addStep("Đang tạo nghiệp vụ đóng gói & áp mã thuế lẻ...");
     await delay(1000);
     
-    // Create the packaging fee item
-    const packagingFee = {
-      id: `fee-${Date.now()}`,
-      name: "Phí đóng gói & Giỏ quà linh hoạt",
-      price: 80000,
+    // REDESIGNED: Split 80k into 50k Material (1.5%) and 30k Labor (7.5%)
+    const basketMaterial = {
+      id: `basket-${Date.now()}`,
+      name: "Giỏ tre mây & Phụ kiện (Vật tư)",
+      price: 50000,
+      quantity: 1,
+      taxCategory: 'RETAIL'
+    };
+    const laborFee = {
+      id: `labor-${Date.now()}`,
+      name: "Công đóng gói & Tạo hình AI",
+      price: 30000,
       quantity: 1,
       taxCategory: 'SERVICE'
     };
     
-    // We calculate the new cart locally to render it immediately in the UI
-    const updatedCart = [...cartToWrap, packagingFee];
+    const updatedCart = [...cartToWrap, basketMaterial, laborFee];
     setActiveCart(updatedCart);
     
     setSessionHistory(prev => [{
