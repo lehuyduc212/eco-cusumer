@@ -571,6 +571,13 @@ const BanHang = () => {
     
     setActiveCart(newCart);
 
+    // LOGGING: Record the action for history review
+    const logEntry = {
+      timestamp: new Date().toLocaleTimeString(),
+      action: "Thêm sản phẩm",
+      details: items.map(i => `${i.detectedQty || 1} ${i.name}`).join(", "),
+      totalItems: newCart.reduce((sum, i) => sum + (i.quantity || 1), 0)
+    };
     setSessionHistory(prev => [...prev, logEntry]);
 
     const comboInOrder = items.find(i => i.comboItems);
