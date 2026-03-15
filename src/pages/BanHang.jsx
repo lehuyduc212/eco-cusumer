@@ -53,28 +53,67 @@ import {
   FileBarChart
 } from 'lucide-react';
 
+// --- TAX RATES ---
+const TAX_RATES = {
+  RETAIL: 0.015, // 1.5% for individual retail goods
+  SERVICE: 0.075, // 7.5% for services/gift-packaging
+};
+
 // --- MOCK INVENTORY DATABASE ---
 const MOCK_DB = [
   // Top 10 High-Stock Items (Bestsellers)
-  { id: 1, name: "Trứng gà", emoji: "🥚", stock: 150, price: 3500, category: "Thực phẩm tươi", keywords: ["trứng", "egg"], salesTrend: 15, lastRestocked: '2024-03-10' },
-  { id: 2, name: "Dầu Simply 1L", emoji: "🍾", stock: 85, price: 65000, category: "Gia vị", keywords: ["dầu ăn", "simply", "dầu"], salesTrend: 8, lastRestocked: '2024-03-12' },
-  { id: 3, name: "Gạo ST25 5kg", emoji: "🍚", stock: 12, price: 185000, category: "Lương thực", keywords: ["gạo", "st25", "rice"], salesTrend: 22, lastRestocked: '2024-03-05' },
-  { id: 4, name: "Nước mắm Nam Ngư", emoji: "🍶", stock: 120, price: 42000, category: "Gia vị", keywords: ["mắm", "nam ngư", "nước mắm"], salesTrend: 5, lastRestocked: '2024-03-14' },
-  { id: 5, name: "Bánh mì Kinh Đô", emoji: "🍞", stock: 8, price: 15000, category: "Bánh kẹo", keywords: ["bánh mì", "kinh đô"], salesTrend: 45, lastRestocked: '2024-03-15' },
-  { id: 6, name: "Sữa TH True Milk", emoji: "🥛", stock: 200, price: 32000, category: "Sữa", keywords: ["sữa", "th true", "milk"], salesTrend: 12, lastRestocked: '2024-03-11' },
-  { id: 7, name: "Coca-Cola 330ml", emoji: "🥤", stock: 300, price: 10000, category: "Nước ngọt", keywords: ["coca", "coke", "nước ngọt"], salesTrend: 18, lastRestocked: '2024-03-13' },
-  { id: 8, name: "Bột giặt Omo 2kg", emoji: "🧺", stock: 5, price: 115000, category: "Tẩy rửa", keywords: ["omo", "bột giặt"], salesTrend: 3, lastRestocked: '2024-03-01' },
-  { id: 9, name: "Kem đánh răng PS", emoji: "🪥", stock: 90, price: 28000, category: "Vệ sinh", keywords: ["kem đánh răng", "ps"], salesTrend: 7, lastRestocked: '2024-03-08' },
-  { id: 10, name: "Mì Hảo Hảo Tôm Cay", emoji: "🍜", stock: 500, price: 4500, category: "Mì gói", keywords: ["mì", "hảo hảo", "tôm chua cay"], salesTrend: 35, lastRestocked: '2024-03-14' },
+  { id: 1, name: "Trứng gà", emoji: "🥚", stock: 150, price: 3500, category: "Thực phẩm tươi", keywords: ["trứng", "egg"], salesTrend: 15, lastRestocked: '2024-03-10', taxCategory: 'RETAIL' },
+  { id: 2, name: "Dầu Simply 1L", emoji: "🍾", stock: 85, price: 65000, category: "Gia vị", keywords: ["dầu ăn", "simply", "dầu"], salesTrend: 8, lastRestocked: '2024-03-12', taxCategory: 'RETAIL' },
+  { id: 3, name: "Gạo ST25 5kg", emoji: "🍚", stock: 12, price: 185000, category: "Lương thực", keywords: ["gạo", "st25", "rice"], salesTrend: 22, lastRestocked: '2024-03-05', taxCategory: 'RETAIL' },
+  { id: 4, name: "Nước mắm Nam Ngư", emoji: "🍶", stock: 120, price: 42000, category: "Gia vị", keywords: ["mắm", "nam ngư", "nước mắm"], salesTrend: 5, lastRestocked: '2024-03-14', taxCategory: 'RETAIL' },
+  { id: 5, name: "Bánh mì Kinh Đô", emoji: "🍞", stock: 8, price: 15000, category: "Bánh kẹo", keywords: ["bánh mì", "kinh đô"], salesTrend: 45, lastRestocked: '2024-03-15', taxCategory: 'RETAIL' },
+  { id: 6, name: "Sữa TH True Milk", emoji: "🥛", stock: 200, price: 32000, category: "Sữa", keywords: ["sữa", "th true", "milk"], salesTrend: 12, lastRestocked: '2024-03-11', taxCategory: 'RETAIL' },
+  { id: 7, name: "Coca-Cola 330ml", emoji: "🥤", stock: 300, price: 10000, category: "Nước ngọt", keywords: ["coca", "coke", "nước ngọt"], salesTrend: 18, lastRestocked: '2024-03-13', taxCategory: 'RETAIL' },
+  { id: 8, name: "Bột giặt Omo 2kg", emoji: "🧺", stock: 5, price: 115000, category: "Tẩy rửa", keywords: ["omo", "bột giặt"], salesTrend: 3, lastRestocked: '2024-03-01', taxCategory: 'RETAIL' },
+  { id: 9, name: "Kem đánh răng PS", emoji: "🪥", stock: 90, price: 28000, category: "Vệ sinh", keywords: ["kem đánh răng", "ps"], salesTrend: 7, lastRestocked: '2024-03-08', taxCategory: 'RETAIL' },
+  { id: 10, name: "Mì Hảo Hảo Tôm Cay", emoji: "🍜", stock: 500, price: 4500, category: "Mì gói", keywords: ["mì", "hảo hảo", "tôm chua cay"], salesTrend: 35, lastRestocked: '2024-03-14', taxCategory: 'RETAIL' },
 
   // Added OOS and low stock items
-  { id: 11, name: "Tương ớt Chinsu", emoji: "🌶️", stock: 0, price: 15000, category: "Gia vị", keywords: ["tương ớt", "chinsu"], salesTrend: 0, lastRestocked: '2024-02-28' },
-  { id: 12, name: "Bánh quy Oreo", emoji: "🍪", stock: 14, price: 25000, category: "Bánh kẹo", keywords: ["oreo", "bánh quy"], salesTrend: 15, lastRestocked: '2024-03-05' },
-  { id: 13, name: "Khăn giấy Tempo", emoji: "🧻", stock: 0, price: 12000, category: "Vệ sinh", keywords: ["tempo", "khăn giấy"], salesTrend: 0, lastRestocked: '2024-03-01' },
-  { id: 14, name: "Xà phòng Lifebuoy", emoji: "🧼", stock: 3, price: 18000, category: "Vệ sinh", keywords: ["lifebuoy", "xà phòng"], salesTrend: 10, lastRestocked: '2024-03-02' },
-  { id: 15, name: "Snack khoai tây O'star", emoji: "🍟", stock: 0, price: 12000, category: "Bánh kẹo", keywords: ["ostar", "bim bim", "snack"], salesTrend: 0, lastRestocked: '2024-03-01' },
-  { id: 24, name: "Pin Duracell AA", emoji: "🔋", stock: 4, price: 45000, category: "Gia dụng", keywords: ["pin", "duracell"], salesTrend: -5, lastRestocked: '2024-02-15' },
-  { id: 30, name: "Trà xanh Không Độ", emoji: "🍃", stock: 2, price: 10000, category: "Nước ngọt", keywords: ["không độ", "trà xanh"], salesTrend: 55, lastRestocked: '2024-03-14' }
+  { id: 11, name: "Tương ớt Chinsu", emoji: "🌶️", stock: 0, price: 15000, category: "Gia vị", keywords: ["tương ớt", "chinsu"], salesTrend: 0, lastRestocked: '2024-02-28', taxCategory: 'RETAIL' },
+  { id: 12, name: "Bánh quy Oreo", emoji: "🍪", stock: 14, price: 25000, category: "Bánh kẹo", keywords: ["oreo", "bánh quy"], salesTrend: 15, lastRestocked: '2024-03-05', taxCategory: 'RETAIL' },
+  { id: 13, name: "Khăn giấy Tempo", emoji: "🧻", stock: 0, price: 12000, category: "Vệ sinh", keywords: ["tempo", "khăn giấy"], salesTrend: 0, lastRestocked: '2024-03-01', taxCategory: 'RETAIL' },
+  { id: 14, name: "Xà phòng Lifebuoy", emoji: "🧼", stock: 3, price: 18000, category: "Vệ sinh", keywords: ["lifebuoy", "xà phòng"], salesTrend: 10, lastRestocked: '2024-03-02', taxCategory: 'RETAIL' },
+  { id: 15, name: "Snack khoai tây O'star", emoji: "🍟", stock: 0, price: 12000, category: "Bánh kẹo", keywords: ["ostar", "bim bim", "snack"], salesTrend: 0, lastRestocked: '2024-03-01', taxCategory: 'RETAIL' },
+  { id: 24, name: "Pin Duracell AA", emoji: "🔋", stock: 4, price: 45000, category: "Gia dụng", keywords: ["pin", "duracell"], salesTrend: -5, lastRestocked: '2024-02-15', taxCategory: 'RETAIL' },
+  { id: 30, name: "Trà xanh Không Độ", emoji: "🍃", stock: 2, price: 10000, category: "Nước ngọt", keywords: ["không độ", "trà xanh"], salesTrend: 55, lastRestocked: '2024-03-14', taxCategory: 'RETAIL' },
+
+  // Special Combo Items for Tax Optimization Mime
+  { 
+    id: 50, 
+    name: "Giỏ quà Trái cây", 
+    emoji: "🧺", 
+    stock: 20, 
+    price: 450000, 
+    category: "Combo Quà", 
+    keywords: ["giỏ quà", "basket", "gift"], 
+    taxCategory: 'SERVICE', 
+    comboItems: [
+      { id: 51, name: "Táo Envy 1kg", price: 120000, taxCategory: 'RETAIL' },
+      { id: 52, name: "Nho mẫu đơn 500g", price: 250000, taxCategory: 'RETAIL' },
+      { id: 53, name: "Phí dịch vụ & Gói quà", price: 80000, taxCategory: 'SERVICE' }
+    ]
+  },
+  { 
+    id: 60, 
+    name: "Combo Gia vị 01", 
+    emoji: "🧂", 
+    stock: 50, 
+    price: 150000, 
+    category: "Combo Gia vị", 
+    keywords: ["combo gia vị", "gói gia vị"], 
+    taxCategory: 'SERVICE',
+    comboItems: [
+      { id: 2, name: "Dầu Simply 1L", price: 65000, taxCategory: 'RETAIL' },
+      { id: 4, name: "Nước mắm Nam Ngư", price: 42000, taxCategory: 'RETAIL' },
+      { id: 11, name: "Tương ớt Chinsu", price: 15000, taxCategory: 'RETAIL' },
+      { id: 61, name: "Túi quà & Công đóng gói", price: 28000, taxCategory: 'SERVICE' }
+    ]
+  }
 ];
 
 const NGHIEP_VU_ITEMS = [
@@ -322,9 +361,6 @@ const BanHang = () => {
            <div className="ledger-row"><span>Thuế GTGT (8%):</span><span>6.000₫</span></div>
            <div className="ledger-row"><span>Trạng thái:</span><span className="verify-badge">ĐÃ XÁC THỰC</span></div>
         </div>
-        <div className="ledger-footer text-[10px] text-gray-500 italic text-right mt-2">
-           Tự động thống kê vào báo cáo giải trình thuế
-        </div>
       </div>,
       'result',
       'ledger'
@@ -535,14 +571,41 @@ const BanHang = () => {
     
     setActiveCart(newCart);
 
-    // LOGGING: Record the action for history review
-    const logEntry = {
-      timestamp: new Date().toLocaleTimeString(),
-      action: "Thêm sản phẩm",
-      details: items.map(i => `${i.detectedQty || 1} ${i.name}`).join(", "),
-      totalItems: newCart.reduce((sum, i) => sum + (i.quantity || 1), 0)
-    };
     setSessionHistory(prev => [...prev, logEntry]);
+
+    const comboInOrder = items.find(i => i.comboItems);
+    if (comboInOrder) {
+      addStep(
+        <div className="tax-optimization-card premium-glass fade-in">
+           <div className="opt-header">
+              <Sparkles size={16} className="text-amber-500" />
+              <span>Gợi ý Tối ưu Thuế AI</span>
+           </div>
+           <div className="opt-content mt-2">
+              <p>Phát hiện <b>{comboInOrder.name}</b> đang được tính thuế <b>Dịch vụ (7.5%)</b>.</p>
+              <div className="opt-compare mt-3">
+                 <div className="compare-item old">
+                    <small>Mặc định</small>
+                    <div className="tax-pill">7.5%</div>
+                    <strong>{(comboInOrder.price * TAX_RATES.SERVICE).toLocaleString()}₫ thuế</strong>
+                 </div>
+                 <ArrowRight size={14} className="opacity-40" />
+                 <div className="compare-item new">
+                    <small>Tối ưu AI</small>
+                    <div className="tax-pill retail">1.5%</div>
+                    <strong>{(comboInOrder.comboItems.reduce((sum, ci) => sum + (ci.price * TAX_RATES[ci.taxCategory]), 0)).toLocaleString()}₫ thuế</strong>
+                 </div>
+              </div>
+              <p className="opt-hint mt-3">
+                 AI gợi ý tách thành các item bán lẻ để áp dụng mức thuế <b>1.5%</b>. Chỉ phần đóng gói chịu thuế 7.5%.
+              </p>
+           </div>
+           <button className="opt-apply-btn mt-4" onClick={() => handleOptimizeTax(comboInOrder.id)}>
+              <CheckCircle2 size={14} /> Tối ưu Thuế ngay
+           </button>
+        </div>, 'result'
+      );
+    }
 
     const totalAmount = newCart.reduce((sum, i) => sum + (i.price * (i.quantity || 1)), 0);
 
@@ -551,15 +614,24 @@ const BanHang = () => {
         <div className="rc-header"><FileText size={16} /> Hoá đơn phiên làm việc</div>
         <div className="rc-body">
            {newCart.map((item, idx) => (
-              <div className="rc-line" key={`final-${item.id}-${idx}`}>
-                <span>{item.name} <strong>x{item.quantity || 1}</strong></span>
-                <span>{(item.price * (item.quantity || 1)).toLocaleString()}₫</span>
+              <div className="rc-line-group" key={`final-${item.id}-${idx}`}>
+                <div className="rc-line">
+                  <span>{item.name} <strong>x{item.quantity || 1}</strong></span>
+                  <span>{(item.price * (item.quantity || 1)).toLocaleString()}₫</span>
+                </div>
+                <div className="rc-tax-tag">
+                   {item.taxCategory === 'SERVICE' ? 'Thuế Dịch vụ (7.5%)' : 'Thuế Bán lẻ (1.5%)'}
+                </div>
               </div>
            ))}
            <div className="rc-divider"></div>
            <div className="rc-total">
-             <span>Tổng cộng ({newCart.reduce((sum, i) => sum + (i.quantity || 1), 0)} món)</span>
-             <span className="total-val">{totalAmount.toLocaleString()}₫</span>
+              <span>Tổng cộng ({newCart.reduce((sum, i) => sum + (i.quantity || 1), 0)} món)</span>
+              <span className="total-val">{totalAmount.toLocaleString()}₫</span>
+           </div>
+           <div className="rc-tax-summary mt-2">
+              <span>Ước tính thuế:</span>
+              <strong>{newCart.reduce((sum, i) => sum + (i.price * i.quantity * TAX_RATES[i.taxCategory]), 0).toLocaleString()}₫</strong>
            </div>
         </div>
       </div>,
@@ -630,6 +702,37 @@ const BanHang = () => {
       }
       return item;
     }));
+  };
+
+  const handleOptimizeTax = async (comboId) => {
+    setAiState(AI_STATE.PROCESSING);
+    addStep("Đang phân tách combo và tái cơ cấu danh mục thuế...");
+    await delay(1000);
+    
+    setActiveCart(prev => {
+      const comboItem = prev.find(i => i.id === comboId);
+      if (!comboItem || !comboItem.comboItems) return prev;
+      
+      const otherItems = prev.filter(i => i.id !== comboId);
+      const splitItems = comboItem.comboItems.map(ci => ({
+        ...ci,
+        id: `split-${comboId}-${ci.id}`,
+        quantity: comboItem.quantity || 1,
+        keywords: [ci.name.toLowerCase()]
+      }));
+      
+      return [...otherItems, ...splitItems];
+    });
+    
+    updateLastStep('done');
+    addStep(
+      <div className="tax-optimization-success premium-glass fade-in">
+         <CheckCircle2 size={24} className="text-green-500" />
+         <h4>Đã tối ưu thuế thành công!</h4>
+         <p>Đơn hàng đã được liệt kê theo từng item để hưởng mức thuế <b>Bán lẻ (1.5%)</b>.</p>
+      </div>, 'result'
+    );
+    setAiState(AI_STATE.DONE);
   };
 
   const removeCartItem = (id) => {

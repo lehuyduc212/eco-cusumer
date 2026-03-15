@@ -3911,3 +3911,130 @@ body.ai-expanded {
 .ai-assistant-popup-wrapper {
   overflow: visible !important;
 }
+
+/* --- PHASE 19: AI TAX OPTIMIZATION FOR COMBOS --- */
+
+.tax-optimization-card {
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 248, 226, 0.95));
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.opt-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 850;
+  color: #B45309;
+}
+
+.opt-content p {
+  font-size: 13px;
+  color: #1E293B;
+  line-height: 1.5;
+}
+
+.opt-compare {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px dashed rgba(0, 0, 0, 0.1);
+}
+
+.compare-item {
+  text-align: center;
+  flex: 1;
+}
+
+.compare-item small {
+  display: block;
+  font-size: 10px;
+  text-transform: uppercase;
+  color: #64748B;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.tax-pill {
+  display: inline-block;
+  padding: 2px 8px;
+  background: #FEE2E2;
+  color: #EF4444;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 900;
+  margin-bottom: 4px;
+}
+
+.tax-pill.retail {
+  background: #DCFCE7;
+  color: #10B981;
+}
+
+.compare-item strong {
+  display: block;
+  font-size: 14px;
+  color: #1E293B;
+  font-weight: 850;
+}
+
+.opt-apply-btn {
+  width: 100%;
+  padding: 12px;
+  background: #1E293B;
+  color: white;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.opt-apply-btn:hover {
+  background: #0F172A;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.tax-optimization-success {
+  text-align: center;
+  padding: 20px;
+}
+
+.tax-optimization-success h4 {
+  font-size: 16px;
+  font-weight: 900;
+  color: #10B981;
+  margin-top: 12px;
+}
+
+.rc-tax-tag {
+  font-size: 10px;
+  color: #94A3B8;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.rc-line-group {
+  margin-bottom: 4px;
+}
+
+.rc-tax-summary {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #64748B;
+  border-top: 1px dashed rgba(0, 0, 0, 0.05);
+  padding-top: 8px;
+}
