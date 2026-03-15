@@ -100,7 +100,7 @@ const MOCK_DB = [
     stock: 30, 
     price: 250000, 
     category: "Thực phẩm tươi", 
-    keywords: ["nho", "mẫu đơn", "nho xanh"], 
+    keywords: ["nho", "mẫu đơn", "nho xanh", "nhau"], 
     taxCategory: 'RETAIL' 
   },
   { 
@@ -299,13 +299,20 @@ const BanHang = () => {
   const parseVietnameseQuantity = (text) => {
     const lower = text.toLowerCase();
     
-    // 1. Digital + Unit (e.g. 3kg, 5 cân)
-    const unitMatch = lower.match(/(\d+)\s*(kg|cân|g|l|hộp|quả|trứng|chai)/i);
-    if (unitMatch) return parseInt(unitMatch[1]);
+    // 1. Digital + Unit (e.g. 3.5kg, 5,8 cân)
+    const unitMatch = lower.match(/([\d.,]+)\s*(kg|cân|g|l|hộp|quả|trứng|chai)/i);
+    if (unitMatch) {
+       const val = unitMatch[1].replace(',', '.');
+       return parseFloat(val);
+    }
 
     // 2. Direct Digit check
-    const digitMatch = lower.match(/\d+/);
-    if (digitMatch) return parseInt(digitMatch[0]);
+    const digitMatch = lower.match(/[\d.,]+/);
+    if (digitMatch && digitMatch[0].length > 0) {
+       const val = digitMatch[0].replace(',', '.');
+       const parsed = parseFloat(val);
+       if (!isNaN(parsed)) return parsed;
+    }
 
     // 3. Word mapping for Vietnamese numbers
     const wordMap = {
@@ -553,6 +560,8 @@ const BanHang = () => {
     setAiState(AI_STATE.STOCK_ENTRY);
   };
 
+
+
   const handleStockConfirm = async (qty) => {
     setAiState(AI_STATE.PROCESSING);
     const productName = oosProduct || "Sản phẩm";
@@ -594,25 +603,26 @@ const BanHang = () => {
   };
 
   const finalizeOrderFlow = async (items) => {
-    addStep("Đang cập nhật giỏ hàng session...");
-    await delay(800);
-    updateLastStep('done');
+    try {
+      addStep("Đang cập nhật giỏ hàng session...");
+      await delay(800);
+      updateLastStep('done');
 
-    // PERSISTENCE: Accumulate items into the active cart with Quantity Aggregation
-    const newCart = [...activeCart];
-    
-    items.forEach(newItem => {
-      const existingItem = newCart.find(item => item.id === newItem.id);
-      const qtyToAdd = newItem.detectedQty || 1;
+      // PERSISTENCE: Accumulate items into the active cart with Quantity Aggregation
+      const newCart = [...activeCart];
       
-      if (existingItem) {
-        existingItem.quantity = (existingItem.quantity || 1) + qtyToAdd;
-      } else {
-        newCart.push({ ...newItem, quantity: qtyToAdd });
-      }
-    });
-    
-    setActiveCart(newCart);
+      items.forEach(newItem => {
+        const existingItem = newCart.find(item => item.id === newItem.id);
+        const qtyToAdd = newItem.detectedQty || 1;
+        
+        if (existingItem) {
+          existingItem.quantity = (existingItem.quantity || 1) + qtyToAdd;
+        } else {
+          newCart.push({ ...newItem, quantity: qtyToAdd });
+        }
+      });
+      
+      setActiveCart(newCart);
 
     // LOGGING: Record the action for history review
     const logEntry = {
@@ -716,10 +726,15 @@ const BanHang = () => {
       'receipt'
     );
     
-    setCartCount(newCart.reduce((sum, i) => sum + (i.quantity || 1), 0));
-    setPendingOrder([]);
-    setLastActionType('SALE_SUCCESS');
-    setAiState(AI_STATE.DONE);
+      setCartCount(newCart.reduce((sum, i) => sum + (i.quantity || 1), 0));
+      setPendingOrder([]);
+      setLastActionType('SALE_SUCCESS');
+      setAiState(AI_STATE.DONE);
+    } catch (error) {
+      console.error("Order Flow Error:", error);
+      addStep("Dạ, có lỗi xảy ra khi xử lý giỏ hàng. Em đã đưa hệ thống về trạng thái an toàn.", 'result', 'error');
+      setAiState(AI_STATE.DONE);
+    }
   };
 
   const handleInventoryReport = async () => {
@@ -1022,10 +1037,12 @@ const BanHang = () => {
   };
 
   const simulateProcessing = async (text = "Voice command") => {
-    // Show user transcript as a chat bubble first
-    addStep(text, 'result', 'user');
-    setAiState(AI_STATE.PROCESSING);
-    setIsExpanded(true);
+    try {
+      // Show user transcript as a chat bubble first
+      addStep(text, 'result', 'user');
+      if (aiState === AI_STATE.PROCESSING) return;
+      setAiState(AI_STATE.PROCESSING);
+      setIsExpanded(true);
     await delay(600);
     
     const lowerText = text.toLowerCase();
@@ -1275,9 +1292,7 @@ const BanHang = () => {
        return handleGlobalReporting();
     }
 
-    if (lowerText.includes('gói quà') || lowerText.includes('giỏ quà') || lowerText.includes('đóng giỏ')) {
-       return handleDynamicWrapping();
-    }
+    // Move Layout/Combo intents AFTER product detection section for better combined handling
 
     if (lowerText.includes('in hoá đơn') || lowerText.includes('xuất hoá đơn') || lowerText.includes('in phiếu')) {
       return handlePrintIntent();
@@ -1484,12 +1499,28 @@ const BanHang = () => {
         return handleOOSFlow(firstOos.name);
       } else {
         // All items in stock - proceed normally
-        return finalizeOrderFlow(detected);
+        await finalizeOrderFlow(detected);
+        
+        // POST-DETECTION: Check if the user ALSO wanted to wrap/pack this
+        if (lowerText.includes('gói quà') || lowerText.includes('giỏ quà') || lowerText.includes('đóng giỏ') || lowerText.includes('giỏi')) {
+           return handleDynamicWrapping();
+        }
+        return;
       }
+    }
+
+    // CHECK INTENTS THAT MIGHT HAVE BEEN SKIPPED
+    if (lowerText.includes('gói quà') || lowerText.includes('giỏ quà') || lowerText.includes('đóng giỏ') || lowerText.includes('giỏi')) {
+       return handleDynamicWrapping();
     }
 
     addStep("Xin lỗi, em chưa tìm thấy sản phẩm này trong kho. Anh/Chị có muốn em tìm kiếm trên danh mục NCC không?", 'result');
     setAiState(AI_STATE.DONE);
+    } catch (error) {
+       console.error("AI Processing Error:", error);
+       addStep("Dạ, bộ não của em đang gặp chút trục trặc khi xử lý câu lệnh này. Em đã đặt lại trạng thái để phục vụ Anh/Chị tiếp ạ!", 'result', 'error');
+       setAiState(AI_STATE.DONE);
+    }
   };
 
   const handleAction = () => {
