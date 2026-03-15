@@ -51,7 +51,8 @@ import {
   ChevronLeft,
   BarChart3,
   FileBarChart,
-  Gift
+  Gift,
+  RotateCcw
 } from 'lucide-react';
 
 // --- TAX RATES ---
