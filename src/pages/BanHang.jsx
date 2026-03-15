@@ -2352,55 +2352,7 @@ const BanHang = () => {
 
 
               {processSteps.length === 0 && (aiState === AI_STATE.IDLE || aiState === AI_STATE.PROCESSING) && (
-                <div className="ai-onboarding-premium fade-in">
-                  <div className="onboarding-hero">
-                    <div className="hero-orb-glow"></div>
-                    <Sparkles size={32} className="hero-sparkle" />
-                    <h3 className="hero-greeting mt-4">Chào Anh/Chị!</h3>
-                    <p className="hero-subtext">Hôm nay em có thể giúp gì cho cửa hàng mình ạ?</p>
-                  </div>
-                  
-                  <div className="onboarding-suggestions mt-8">
-                    <p className="suggestion-label mb-3">Thử các lệnh sau:</p>
-                    <div className="suggestion-grid">
-                      <div className="suggest-card-premium" onClick={() => simulateProcessing("Bán cho khách 2 vỉ trứng gà")}>
-                        <div className="suggest-icon bg-blue-50 text-blue-600"><ShoppingBag size={18} /></div>
-                        <div className="suggest-info">
-                          <p>Bán hàng</p>
-                          <span>"Bán 2 vỉ trứng"</span>
-                        </div>
-                      </div>
-                      <div className="suggest-card-premium" onClick={() => handleInventoryReport()}>
-                        <div className="suggest-icon bg-orange-50 text-orange-600"><BarChart2 size={18} /></div>
-                        <div className="suggest-info">
-                          <p>Tồn kho</p>
-                          <span>"Kiểm tra kho"</span>
-                        </div>
-                      </div>
-                      <div className="suggest-card-premium" onClick={() => simulateProcessing("Cho tôi xem lịch sử")}>
-                        <div className="suggest-icon bg-green-50 text-green-600"><Clock size={18} /></div>
-                        <div className="suggest-info">
-                          <p>Lịch sử</p>
-                          <span>"Xem lịch sử đơn"</span>
-                        </div>
-                      </div>
-                      <div className="suggest-card-premium" onClick={() => handleStockTransfer()}>
-                        <div className="suggest-icon bg-blue-50 text-blue-600"><Truck size={18} /></div>
-                        <div className="suggest-info">
-                          <p>Điều chuyển</p>
-                          <span>"Chuyển kho 20 trứng"</span>
-                        </div>
-                      </div>
-                      <div className="suggest-card-premium" onClick={() => handleGlobalReporting()}>
-                        <div className="suggest-icon bg-purple-50 text-purple-600"><FileBarChart size={18} /></div>
-                        <div className="suggest-info">
-                          <p>Báo cáo & Thuế</p>
-                          <span>"Xem báo cáo thuế"</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                renderStrategicDashboard()
               )}
 
               <div className="process-steps-container">
