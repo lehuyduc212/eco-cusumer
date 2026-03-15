@@ -52,7 +52,9 @@ import {
   BarChart3,
   FileBarChart,
   Gift,
-  RotateCcw
+  RotateCcw,
+  Percent,
+  Layout
 } from 'lucide-react';
 
 // --- TAX RATES ---
