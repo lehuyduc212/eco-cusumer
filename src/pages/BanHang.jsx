@@ -367,10 +367,94 @@ const BanHang = () => {
     setActiveCart([]);
     setCartCount(0);
     setPendingOrder([]);
-    setOosQueue([]);
-    setOosProduct(null);
     setTransferProduct(null);
     setLastActionType('NONE');
+  };
+
+  const handleClearanceStrategy = async (productName, stockCount) => {
+    setAiState(AI_STATE.PROCESSING);
+    addStep(`Đang phân tích dữ liệu tồn kho cho ${productName}...`);
+    await delay(1000);
+    updateLastStep('done');
+
+    addStep(
+      <div className="strategic-consultant-card fade-in">
+        <div className="consultant-glow"></div>
+        <div className="consultant-badge"><Zap size={12} /> Chiến lược Xả kho</div>
+        <h4>Giải phóng vốn cho <b>{productName}</b></h4>
+        
+        <div className="strategy-advice">
+          <p>
+            Dữ liệu cho thấy tồn kho <b>{stockCount} đơn vị</b> đang chiếm dụng 12% dòng vốn lưu động. 
+            Em gợi ý Anh/Chị nên <b>xả kho nhanh</b> để nhập hàng tươi mới cho tuần sau.
+          </p>
+        </div>
+
+        <div className="strategy-actions">
+          <button className="strategy-btn primary" onClick={() => handleApplyStrategicDiscount(productName, 15)}>
+            <Percent size={16} /> Áp dụng Giảm giá 15%
+          </button>
+          <button className="strategy-btn secondary" onClick={() => addStep("Đang kết nối máy in Bluetooth để in tem...", 'done')}>
+            <Printer size={16} /> In tem "Xả kho - Giá sốc"
+          </button>
+          <button className="strategy-btn secondary" onClick={() => setAiState(AI_STATE.DONE)}>
+            <X size={16} /> Để sau
+          </button>
+        </div>
+      </div>, 'result', 'consultant'
+    );
+    setAiState(AI_STATE.DONE);
+  };
+
+  const handleUpsellStrategy = async (productName, context) => {
+    setAiState(AI_STATE.PROCESSING);
+    addStep(`Đang nghiên cứu xu hướng thị trường cho ${productName}...`);
+    await delay(1000);
+    updateLastStep('done');
+
+    addStep(
+      <div className="strategic-consultant-card fade-in">
+        <div className="consultant-glow"></div>
+        <div className="consultant-badge"><TrendingUp size={12} /> Tăng trưởng Doanh thu</div>
+        <h4>Đẩy mạnh bán lẻ <b>{productName}</b></h4>
+        
+        <div className="strategy-advice">
+          <p>
+            Sản phẩm này {context}. Em gợi ý Anh/Chị áp dụng <b>hiệu ứng chim mồi</b>: 
+            Trưng bày ngay tại quầy thanh toán hoặc kệ trung tâm để tăng 25% tỷ lệ click.
+          </p>
+        </div>
+
+        <div className="strategy-actions">
+          <button className="strategy-btn primary" onClick={() => simulateProcessing(`Bán giỏ quà gồm ${productName} và Nho mẫu đơn`)}>
+            <Gift size={16} /> Tạo Combo Quà tặng (Upsell)
+          </button>
+          <button className="strategy-btn secondary" onClick={() => addStep("Vị trí 'Kệ trung tâm' đã được đánh dấu ưu tiên.", 'done')}>
+            <Layout size={16} /> Đánh dấu Vị trí Chiến lược
+          </button>
+          <button className="strategy-btn secondary" onClick={() => setAiState(AI_STATE.DONE)}>
+             Bỏ qua
+          </button>
+        </div>
+      </div>, 'result', 'consultant'
+    );
+    setAiState(AI_STATE.DONE);
+  };
+
+  const handleApplyStrategicDiscount = async (productName, discount) => {
+    setAiState(AI_STATE.PROCESSING);
+    addStep(`Đang thiết lập chương trình khuyến mãi ${discount}% cho ${productName}...`);
+    await delay(1200);
+    updateLastStep('done');
+    
+    addStep(
+      <div className="tax-optimization-success premium-glass fade-in">
+         <CheckCircle2 size={24} className="text-green-500" />
+         <h4>Đã kích hoạt khuyến mãi!</h4>
+         <p>Toàn bộ <b>{productName}</b> trong kho đã được áp mức giá mới (-{discount}%).</p>
+      </div>, 'result'
+    );
+    setAiState(AI_STATE.DONE);
   };
 
   const renderStrategicDashboard = () => {
@@ -384,7 +468,7 @@ const BanHang = () => {
 
         <div className="strategic-grid">
           {/* Tile 1: Clearance */}
-          <div className="strategic-tile tile-warning" onClick={() => simulateProcessing("Lên kế hoạch xả kho Mì Hảo Hảo")}>
+          <div className="strategic-tile tile-warning" onClick={() => handleClearanceStrategy("Mì Hảo Hảo", 150)}>
             <div className="tile-icon bg-red-50 text-red-600"><TrendingDown size={18} /></div>
             <div className="tile-label">Clear tồn kho</div>
             <div className="tile-value">Mì Hảo Hảo (Còn 150 thùng)</div>
@@ -392,7 +476,7 @@ const BanHang = () => {
           </div>
 
           {/* Tile 2: Best Seller */}
-          <div className="strategic-tile tile-success" onClick={() => simulateProcessing("Tăng hiển thị cho Táo Envy")}>
+          <div className="strategic-tile tile-success" onClick={() => handleUpsellStrategy("Táo Envy", "Đang là xu hướng")}>
             <div className="tile-icon bg-green-50 text-green-600"><TrendingUp size={18} /></div>
             <div className="tile-label">Bán thêm</div>
             <div className="tile-value">Táo Envy đang HOT</div>
@@ -491,11 +575,11 @@ const BanHang = () => {
           </div>
         </div>
 
-        <div className="session-start-ctas mt-8">
+        {/* <div className="session-start-ctas mt-8">
            <button className="start-cta-btn" onClick={() => handleMicClick()}>
               <Mic size={18} /> Bán hàng bằng giọng nói
            </button>
-        </div>
+        </div> */}
       </div>
     );
   };
