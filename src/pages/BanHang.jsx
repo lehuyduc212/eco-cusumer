@@ -334,6 +334,17 @@ const BanHang = () => {
   };
 
   // --- Intents ---
+  const resetSession = () => {
+    setActiveCart([]);
+    setCartCount(0);
+    setPendingOrder([]);
+    setOosQueue([]);
+    setOosProduct(null);
+    setTransferProduct(null);
+    // Note: We might want to keep sessionHistory for the review action, 
+    // but clear the current active cart.
+  };
+
   const handleCheckoutIntent = async () => {
     setAiState(AI_STATE.PROCESSING);
     setIsExpanded(true);
@@ -342,19 +353,21 @@ const BanHang = () => {
     await delay(1200);
     updateLastStep('done');
 
+    const totalAmount = activeCart.reduce((sum, i) => sum + (i.price * (i.quantity || 1)), 0);
+
     addStep(
       <div className="success-card">
          <div className="sc-icon"><CheckCircle2 size={32} color="#10B981" /></div>
          <h4 className="sc-title">Chốt đơn thành công!</h4>
          <p className="sc-desc">Hoá đơn <strong>#HD09384</strong> đã được lưu vào hệ thống.</p>
-         <div className="sc-amount">Tổng thu: 75.000₫</div>
+         <div className="sc-amount">Tổng thu: {totalAmount.toLocaleString()}₫</div>
       </div>,
       'result',
       'success'
     );
     await delay(400);
 
-    setCartCount(0);
+    resetSession();
     setAiState(AI_STATE.SUCCESS);
     await delay(1000);
     handleLedgerFlow();
@@ -1037,6 +1050,15 @@ const BanHang = () => {
     // 2. ACTION INTENTS (Strict Matching) - Check these before product detection to avoid overlap
     if (lowerText.includes('chốt đơn') || lowerText.includes('thanh toán') || lowerText.includes('trả tiền')) {
       return handleCheckoutIntent();
+    }
+
+    if (lowerText.includes('hủy') || lowerText.includes('xóa giỏ') || lowerText.includes('làm mới')) {
+      addStep("Đang hủy giỏ hàng hiện tại...");
+      await delay(800);
+      resetSession();
+      updateLastStep('done');
+      addStep("Dạ, em đã làm mới session. Giỏ hàng hiện đã trống, sẵn sàng cho đơn hàng mới của Anh/Chị ạ!", 'result', 'success');
+      return setAiState(AI_STATE.DONE);
     }
     
     // NEW: Reporting Specific Intents
