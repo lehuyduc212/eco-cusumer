@@ -4702,3 +4702,451 @@ body.ai-expanded {
   0% { width: 0%; }
   100% { width: 100%; }
 }
+/* ============================================================
+   ACCOUNTING & RECONCILIATION HUB (Elite Audit UX)
+   ============================================================ */
+
+/* ============================================================
+   ELITE ACCOUNTING & RECONCILIATION HUB
+   ============================================================ */
+
+.elite-glass {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.02);
+}
+
+.audit-header-main {
+  background: linear-gradient(135deg, #0f172a, #334155);
+  padding: 24px;
+  color: white;
+}
+
+.audit-title-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.audit-title-text h3 {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin: 0;
+  opacity: 0.9;
+}
+
+.audit-subtitle {
+  font-size: 18px;
+  font-weight: 700;
+  display: block;
+  margin-top: 4px;
+}
+
+.audit-stats-row {
+  display: flex;
+  background: #f8fafc;
+  padding: 1px;
+  gap: 1px;
+}
+
+.audit-stat-box {
+  flex: 1;
+  background: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.audit-stat-box label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.audit-value {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.audit-trend {
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.audit-trend.up { color: #10b981; }
+.audit-trend.neutral { color: #64748b; }
+
+.audit-invoice-timeline {
+  padding: 24px;
+}
+
+.timeline-header {
+  font-size: 12px;
+  font-weight: 800;
+  color: #475569;
+  letter-spacing: 0.5px;
+  margin-bottom: 20px;
+}
+
+.timeline-scroll {
+  max-height: 300px;
+  overflow-y: auto;
+  padding-left: 10px;
+}
+
+.timeline-item {
+  position: relative;
+  padding-left: 24px;
+  padding-bottom: 24px;
+  border-left: 2px solid #e2e8f0;
+}
+
+.timeline-item:last-child {
+  border-left-color: transparent;
+}
+
+.time-node {
+  position: absolute;
+  left: -7px;
+  top: 0;
+  width: 12px;
+  height: 12px;
+  background: #3b82f6;
+  border: 3px solid white;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+.timeline-content {
+  background: #f8fafc;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.02);
+}
+
+.timeline-content .upper {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.inv-date { font-size: 11px; font-weight: 700; color: #94a3b8; }
+.inv-qty { font-size: 12px; font-weight: 800; color: #10b981; }
+
+.timeline-content .lower {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.inv-supplier { font-size: 13px; font-weight: 600; color: #334155; }
+.inv-price { font-size: 14px; font-weight: 700; color: #0f172a; }
+
+.audit-actions-elite {
+  padding: 0 24px 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.elite-btn-outline {
+  background: white;
+  border: 1px solid #e2e8f0;
+  padding: 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.elite-btn-primary {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* Reconciliation Hub Elite */
+.reconciliation-hub-elite {
+  padding: 24px;
+}
+
+.recon-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 800;
+  color: #0f172a;
+  font-size: 15px;
+  margin-bottom: 24px;
+}
+
+.recon-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.recon-item-card {
+  background: white;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+}
+
+.recon-item-card.alert {
+  border-color: #fee2e2;
+  background: #fffafa;
+}
+
+.recon-item-card .p-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.p-name { font-weight: 700; color: #1e293b; font-size: 14px; }
+
+.alert-badge {
+  background: #ef4444;
+  color: white;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.p-stats {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-top: 1px solid #f8fafc;
+}
+
+.p-stats .stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.p-stats .stat span { font-size: 10px; color: #94a3b8; font-weight: 700; text-transform: uppercase; }
+.p-stats .stat strong { font-size: 15px; color: #0f172a; }
+
+.recon-advice {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: #fef2f2;
+  border-radius: 8px;
+  font-size: 11px;
+  color: #b91c1c;
+  display: flex;
+  gap: 6px;
+  line-height: 1.4;
+}
+
+.recon-btn-full {
+  width: 100%;
+  padding: 14px;
+  background: #0f172a;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.hist-date { font-size: 11px; color: #94a3b8; }
+.hist-supplier { font-size: 13px; font-weight: 600; color: #334155; }
+
+.hist-right {
+  text-align: right;
+}
+
+.hist-qty { font-size: 12px; color: #64748b; }
+.hist-price { font-size: 14px; font-weight: 700; color: #020617; }
+
+.audit-actions {
+  display: flex;
+  gap: 10px;
+  padding: 0 20px 20px;
+}
+
+.btn-audit-outline {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* Reconciliation Hub Styles */
+.reconciliation-hub {
+  padding: 4px;
+}
+
+.rh-comparison-card {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  border-left: 4px solid #3b82f6;
+}
+
+.rh-comparison-card.warning { border-left-color: #ef4444; }
+
+.rh-comp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+.rh-comp-title { font-size: 15px; font-weight: 700; color: #1e293b; }
+
+.rh-metrics {
+  display: flex;
+  gap: 20px;
+}
+
+.rh-metric { display: flex; flex-direction: column; }
+.rh-metric .m-label { font-size: 11px; color: #64748b; text-transform: uppercase; }
+.rh-metric .m-val { font-size: 16px; font-weight: 700; color: #0f172a; }
+
+.rh-status-bar {
+  margin-top: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-valid { background: #f0fdf4; color: #166534; }
+.status-invalid { background: #fef2f2; color: #991b1b; }
+
+.rh-footer-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.btn-rh-primary {
+  flex: 1;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 13px;
+}
+/* Session History Card */
+.session-history-card {
+  padding: 4px;
+}
+
+.history-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 15px;
+}
+
+.history-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.history-log-item {
+  background: white;
+  border-radius: 12px;
+  padding: 12px 16px;
+  border: 1px solid rgba(0,0,0,0.04);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  display: grid;
+  grid-template-areas: 
+    "time action"
+    "details details";
+  gap: 4px 12px;
+}
+
+.log-time {
+  grid-area: time;
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.log-action {
+  grid-area: action;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+  text-align: right;
+}
+
+.log-details {
+  grid-area: details;
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.4;
+  margin-top: 4px;
+}
+
+.history-footer {
+  display: flex;
+  justify-content: center;
+}
+
+.history-btn.outline {
+  background: transparent;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  padding: 8px 24px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+}

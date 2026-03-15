@@ -54,7 +54,9 @@ import {
   Gift,
   RotateCcw,
   Percent,
-  Layout
+  Layout,
+  AlertCircle,
+  FileSearch
 } from 'lucide-react';
 
 // --- TAX RATES ---
@@ -65,94 +67,56 @@ const TAX_RATES = {
 
 // --- MOCK INVENTORY DATABASE ---
 const MOCK_DB = [
-  // Top 10 High-Stock Items (Bestsellers)
-  { id: 1, name: "Trứng gà", emoji: "🥚", stock: 150, price: 3500, category: "Thực phẩm tươi", keywords: ["trứng", "egg"], salesTrend: 15, lastRestocked: '2024-03-10', taxCategory: 'RETAIL' },
-  { id: 2, name: "Dầu Simply 1L", emoji: "🍾", stock: 85, price: 65000, category: "Gia vị", keywords: ["dầu ăn", "simply", "dầu"], salesTrend: 8, lastRestocked: '2024-03-12', taxCategory: 'RETAIL' },
-  { id: 3, name: "Gạo ST25 5kg", emoji: "🍚", stock: 12, price: 185000, category: "Lương thực", keywords: ["gạo", "st25", "rice"], salesTrend: 22, lastRestocked: '2024-03-05', taxCategory: 'RETAIL' },
-  { id: 4, name: "Nước mắm Nam Ngư", emoji: "🍶", stock: 120, price: 42000, category: "Gia vị", keywords: ["mắm", "nam ngư", "nước mắm"], salesTrend: 5, lastRestocked: '2024-03-14', taxCategory: 'RETAIL' },
-  { id: 5, name: "Bánh mì Kinh Đô", emoji: "🍞", stock: 8, price: 15000, category: "Bánh kẹo", keywords: ["bánh mì", "kinh đô"], salesTrend: 45, lastRestocked: '2024-03-15', taxCategory: 'RETAIL' },
-  { id: 6, name: "Sữa TH True Milk", emoji: "🥛", stock: 200, price: 32000, category: "Sữa", keywords: ["sữa", "th true", "milk"], salesTrend: 12, lastRestocked: '2024-03-11', taxCategory: 'RETAIL' },
-  { id: 7, name: "Coca-Cola 330ml", emoji: "🥤", stock: 300, price: 10000, category: "Nước ngọt", keywords: ["coca", "coke", "nước ngọt"], salesTrend: 18, lastRestocked: '2024-03-13', taxCategory: 'RETAIL' },
-  { id: 8, name: "Bột giặt Omo 2kg", emoji: "🧺", stock: 5, price: 115000, category: "Tẩy rửa", keywords: ["omo", "bột giặt"], salesTrend: 3, lastRestocked: '2024-03-01', taxCategory: 'RETAIL' },
-  { id: 9, name: "Kem đánh răng PS", emoji: "🪥", stock: 90, price: 28000, category: "Vệ sinh", keywords: ["kem đánh răng", "ps"], salesTrend: 7, lastRestocked: '2024-03-08', taxCategory: 'RETAIL' },
-  { id: 10, name: "Mì Hảo Hảo Tôm Cay", emoji: "🍜", stock: 500, price: 4500, category: "Mì gói", keywords: ["mì", "hảo hảo", "tôm chua cay"], salesTrend: 35, lastRestocked: '2024-03-14', taxCategory: 'RETAIL' },
+  { id: 1, name: 'Táo Envy 1kg', emoji: "🍎", price: 120000, keywords: ['táo', 'envy', 'apple'], stock: 45, taxCategory: 'RETAIL', unit: 'kg' },
+  { id: 2, name: 'Nho mẫu đơn 500g', emoji: "🍇", price: 250000, keywords: ['nho', 'mẫu đơn'], stock: 30, taxCategory: 'RETAIL', unit: 'hộp' },
+  { id: 3, name: 'Mì Hảo Hảo Tôm Cay', emoji: "🍜", price: 4500, keywords: ['mì', 'hảo hảo'], stock: 500, taxCategory: 'RETAIL', unit: 'gói' },
+  { id: 4, name: 'Trứng gà (vỉ 10)', emoji: "🥚", price: 35000, keywords: ['trứng'], stock: 120, taxCategory: 'RETAIL', unit: 'vỉ' },
+  { id: 5, name: 'Sữa tươi TH True 1L', emoji: "🥛", price: 32000, keywords: ['sữa', 'th true'], stock: 80, taxCategory: 'RETAIL', unit: 'hộp' },
+  { id: 6, name: 'Bánh KitKat', emoji: "🍫", price: 15000, keywords: ['kitkat', 'bánh'], stock: 200, taxCategory: 'RETAIL', unit: 'thanh' },
+  { id: 7, name: 'Coca Cola 320ml', emoji: "🥤", price: 10000, keywords: ['coca', 'nước ngọt'], stock: 300, taxCategory: 'RETAIL', unit: 'lon' },
+  { id: 8, name: 'Dầu ăn Simply 1L', emoji: "🧴", price: 55000, keywords: ['dầu ăn', 'simply'], stock: 60, taxCategory: 'RETAIL', unit: 'chai' },
+  { id: 9, name: 'Gạo ST25 5kg', emoji: "🌾", price: 185000, keywords: ['gạo', 'st25'], stock: 40, taxCategory: 'RETAIL', unit: 'túi' },
+  { id: 10, name: 'Nước xả Downy', emoji: "🌸", price: 95000, keywords: ['downy', 'nước xả'], stock: 25, taxCategory: 'RETAIL', unit: 'túi' },
+  { id: 11, name: 'Kem đánh răng PS', emoji: "🪥", price: 35000, keywords: ['ps', 'kem đánh răng'], stock: 90, taxCategory: 'RETAIL', unit: 'tuýp' },
+  { id: 12, name: 'Bia Heineken', emoji: "🍺", price: 22000, keywords: ['bia', 'ken'], stock: 150, taxCategory: 'RETAIL', unit: 'lon' },
+  { id: 13, name: 'Xúc xích CP', emoji: "🌭", price: 45000, keywords: ['xúc xích', 'cp'], stock: 75, taxCategory: 'RETAIL', unit: 'vỉ' },
+  { id: 14, name: 'Bột giặt Omo 3kg', emoji: "🧼", price: 135000, keywords: ['omo', 'bột giặt'], stock: 35, taxCategory: 'RETAIL', unit: 'túi' },
+  { id: 15, name: 'Nước rửa bát Sunlight', emoji: "🍋", price: 28000, keywords: ['sunlight', 'rửa bát'], stock: 110, taxCategory: 'RETAIL', unit: 'chai' }
+];
 
-  // Added OOS and low stock items
-  { id: 11, name: "Tương ớt Chinsu", emoji: "🌶️", stock: 0, price: 15000, category: "Gia vị", keywords: ["tương ớt", "chinsu"], salesTrend: 0, lastRestocked: '2024-02-28', taxCategory: 'RETAIL' },
-  { id: 12, name: "Bánh quy Oreo", emoji: "🍪", stock: 14, price: 25000, category: "Bánh kẹo", keywords: ["oreo", "bánh quy"], salesTrend: 15, lastRestocked: '2024-03-05', taxCategory: 'RETAIL' },
-  { id: 13, name: "Khăn giấy Tempo", emoji: "🧻", stock: 0, price: 12000, category: "Vệ sinh", keywords: ["tempo", "khăn giấy"], salesTrend: 0, lastRestocked: '2024-03-01', taxCategory: 'RETAIL' },
-  { id: 14, name: "Xà phòng Lifebuoy", emoji: "🧼", stock: 3, price: 18000, category: "Vệ sinh", keywords: ["lifebuoy", "xà phòng"], salesTrend: 10, lastRestocked: '2024-03-02', taxCategory: 'RETAIL' },
-  { id: 15, name: "Snack khoai tây O'star", emoji: "🍟", stock: 0, price: 12000, category: "Bánh kẹo", keywords: ["ostar", "bim bim", "snack"], salesTrend: 0, lastRestocked: '2024-03-01', taxCategory: 'RETAIL' },
-  { id: 24, name: "Pin Duracell AA", emoji: "🔋", stock: 4, price: 45000, category: "Gia dụng", keywords: ["pin", "duracell"], salesTrend: -5, lastRestocked: '2024-02-15', taxCategory: 'RETAIL' },
-  { id: 30, name: "Trà xanh Không Độ", emoji: "🍃", stock: 2, price: 10000, category: "Nước ngọt", keywords: ["không độ", "trà xanh"], salesTrend: 55, lastRestocked: '2024-03-14', taxCategory: 'RETAIL' },
+// --- ACCOUNTING MOCK DATA ---
+const INPUT_INVOICES = [
+  { id: 'NK101', productId: 1, date: '2024-03-01', qty: 50, price: 90000, supplier: 'Green Farm' },
+  { id: 'NK102', productId: 1, date: '2024-03-12', qty: 100, price: 85000, supplier: 'Elite Import' },
+  { id: 'NK201', productId: 2, date: '2024-03-05', qty: 80, price: 180000, supplier: 'Premium Garden' },
+  { id: 'NK202', productId: 2, date: '2024-03-14', qty: 120, price: 195000, supplier: 'Green Farm' },
+  { id: 'NK301', productId: 3, date: '2024-03-01', qty: 1000, price: 3600, supplier: 'Acecook Dist.' },
+  { id: 'NK401', productId: 4, date: '2024-03-05', qty: 200, price: 28000, supplier: 'Ba Huan Corp' },
+  { id: 'NK501', productId: 5, date: '2024-03-02', qty: 150, price: 25000, supplier: 'TH Food' },
+  { id: 'NK601', productId: 6, date: '2024-03-10', qty: 300, price: 11000, supplier: 'Nestle VN' },
+  { id: 'NK701', productId: 7, date: '2024-03-01', qty: 500, price: 7500, supplier: 'Coca Cola VN' },
+  { id: 'NK801', productId: 8, date: '2024-03-05', qty: 100, price: 42000, supplier: 'Simply Corp' },
+  { id: 'NK901', productId: 9, date: '2024-03-01', qty: 100, price: 145000, supplier: 'Sóc Trăng Rice' },
+  { id: 'NK1001', productId: 10, date: '2024-03-08', qty: 50, price: 78000, supplier: 'P&G VN' },
+  { id: 'NK1101', productId: 11, date: '2024-03-10', qty: 200, price: 24000, supplier: 'Unilever VN' },
+  { id: 'NK1201', productId: 12, date: '2024-03-01', qty: 400, price: 18000, supplier: 'Heineken VN' },
+  { id: 'NK1301', productId: 13, date: '2024-03-05', qty: 150, price: 32000, supplier: 'CP Food' }
+];
 
-  { 
-    id: 51, 
-    name: "Táo Envy 1kg", 
-    emoji: "🍎", 
-    stock: 50, 
-    price: 120000, 
-    category: "Thực phẩm tươi", 
-    keywords: ["táo", "envy", "táo đỏ"], 
-    taxCategory: 'RETAIL' 
-  },
-  { 
-    id: 52, 
-    name: "Nho mẫu đơn 500g", 
-    emoji: "🍇", 
-    stock: 30, 
-    price: 250000, 
-    category: "Thực phẩm tươi", 
-    keywords: ["nho", "mẫu đơn", "nho xanh", "nhau", "nho mẩu đơn", "nho mẫu"], 
-    taxCategory: 'RETAIL' 
-  },
-  { 
-    id: 53, 
-    name: "Phí dịch vụ & Gói quà", 
-    emoji: "🎀", 
-    stock: 999, 
-    price: 80000, 
-    category: "Dịch vụ", 
-    keywords: ["phí đóng gói", "công gói", "giỏ quà", "gói quà"], 
-    taxCategory: 'SERVICE' 
-  },
-  { 
-    id: 54, 
-    name: "Giỏ tre mây & Phụ kiện", 
-    emoji: "🧺", 
-    stock: 999, 
-    price: 50000, 
-    category: "Vật tư", 
-    keywords: ["giỏ tre", "giỏ mây", "vật liệu gói"], 
-    taxCategory: 'RETAIL' 
-  },
-  { 
-    id: 55, 
-    name: "Công đóng gói nghệ thuật", 
-    emoji: "✍️", 
-    stock: 999, 
-    price: 30000, 
-    category: "Dịch vụ", 
-    keywords: ["công đóng", "nhận công"], 
-    taxCategory: 'SERVICE' 
-  },
-  // Previous Combo Items now referenced as individual entries
-  { 
-    id: 50, 
-    name: "Giỏ quà Trái cây (Sẵn có)", 
-    emoji: "🧺", 
-    stock: 20, 
-    price: 450000, 
-    category: "Combo Quà", 
-    keywords: ["giỏ quà sẵn", "giỏ sẵn"], 
-    taxCategory: 'SERVICE', 
-    comboItems: [
-      { id: 51, name: "Táo Envy 1kg", price: 120000, taxCategory: 'RETAIL' },
-      { id: 52, name: "Nho mẫu đơn 500g", price: 250000, taxCategory: 'RETAIL' },
-      { id: 54, name: "Giỏ tre mây & Phụ kiện", price: 50000, taxCategory: 'RETAIL' },
-      { id: 55, name: "Công đóng gói nghệ thuật", price: 30000, taxCategory: 'SERVICE' }
-    ]
-  },
+const SALES_HISTORY_AGGREGATE = [
+  { productId: 1, totalSold: 105, lastSale: '2024-03-15' },
+  { productId: 2, totalSold: 170, lastSale: '2024-03-14' },
+  { productId: 3, totalSold: 850, lastSale: '2024-03-15' },
+  { productId: 4, totalSold: 380, lastSale: '2024-03-15' }, // DISCREPANCY
+  { productId: 5, totalSold: 70, lastSale: '2024-03-15' },
+  { productId: 6, totalSold: 100, lastSale: '2024-03-15' },
+  { productId: 7, totalSold: 200, lastSale: '2024-03-15' },
+  { productId: 8, totalSold: 40, lastSale: '2024-03-15' },
+  { productId: 9, totalSold: 60, lastSale: '2024-03-15' },
+  { productId: 10, totalSold: 25, lastSale: '2024-03-15' },
+  { productId: 11, totalSold: 110, lastSale: '2024-03-15' },
+  { productId: 12, totalSold: 250, lastSale: '2024-03-15' },
+  { productId: 13, totalSold: 75, lastSale: '2024-03-15' }
 ];
 
 const NGHIEP_VU_ITEMS = [
@@ -546,9 +510,184 @@ const BanHang = () => {
     setAiState(AI_STATE.DONE);
   };
 
+  const handleProductCostAudit = async (productId, filterMonth = null) => {
+    setAiState(AI_STATE.PROCESSING);
+    const product = MOCK_DB.find(p => p.id === productId);
+    const monthText = filterMonth ? ` tháng ${filterMonth}` : "";
+    addStep(`Đang trích lục hồ sơ nhập hàng cho ${product?.name}${monthText}...`);
+    await delay(1000);
+    updateLastStep('done');
+
+    let invoices = INPUT_INVOICES.filter(inv => inv.productId === productId);
+    if (filterMonth) {
+      invoices = invoices.filter(inv => {
+        const invMonth = new Date(inv.date).getMonth() + 1;
+        return invMonth === parseInt(filterMonth);
+      });
+    }
+
+    const avgPrice = invoices.reduce((acc, inv) => acc + inv.price, 0) / (invoices.length || 1);
+    const totalInput = invoices.reduce((acc, inv) => acc + inv.qty, 0);
+
+    addStep(
+      <div className="accounting-audit-card elite-glass fade-in">
+        <div className="audit-header-main">
+           <div className="audit-title-row">
+              <FileSearch size={22} className="text-blue-400" />
+              <div className="audit-title-text">
+                 <h3>HỒ SƠ GIÁ NHẬP & TỒN KHO</h3>
+                 <span className="audit-subtitle">{product?.name} • {filterMonth ? `Tháng ${filterMonth}/2024` : 'Tất cả thời gian'}</span>
+              </div>
+           </div>
+        </div>
+        
+        <div className="audit-stats-row">
+           <div className="audit-stat-box primary border-r border-gray-100">
+              <label>Giá nhập TB</label>
+              <div className="audit-value">{Math.round(avgPrice).toLocaleString()}₫</div>
+              <div className="audit-trend up"><TrendingUp size={12} /> +2.4%</div>
+           </div>
+           <div className="audit-stat-box">
+              <label>Tổng nhập</label>
+              <div className="audit-value">{totalInput} {product?.unit}</div>
+              <div className="audit-trend neutral"><Package size={12} /> Ổn định</div>
+           </div>
+        </div>
+
+        <div className="audit-invoice-timeline">
+           <div className="timeline-header">LỊCH SỬ HOÁ ĐƠN ĐẦU VÀO</div>
+           <div className="timeline-scroll">
+              {invoices.length > 0 ? invoices.map((inv, idx) => (
+                <div className="timeline-item" key={inv.id}>
+                   <div className="time-node"></div>
+                   <div className="timeline-content">
+                      <div className="upper">
+                         <span className="inv-date">{inv.date}</span>
+                         <span className="inv-qty">+{inv.qty} {product?.unit}</span>
+                      </div>
+                      <div className="lower">
+                         <span className="inv-supplier">{inv.supplier}</span>
+                         <span className="inv-price">{inv.price.toLocaleString()}₫</span>
+                      </div>
+                   </div>
+                </div>
+              )) : (
+                <div className="no-data-audit py-4 text-center text-gray-400 text-sm italic">Không tìm thấy dữ liệu nhập hàng kỳ này.</div>
+              )}
+           </div>
+        </div>
+
+         <div className='audit-actions-elite mt-4'>
+            <button className='elite-btn-outline' onClick={() => handleReconciliationDashboard(productId)}>
+               <BarChart3 size={14} /> Đối soát Bán / Nhập
+            </button>
+            <button className='elite-btn-primary'>
+               <Target size={14} /> Tối ưu tồn kho
+            </button>
+         </div>
+      </div>, 'result'
+    );
+    setAiState(AI_STATE.DONE);
+  };
+
+  const handleReconciliationDashboard = async (productId = null) => {
+    setAiState(AI_STATE.PROCESSING);
+    if (!productId) {
+      addStep('Đang phân tích toàn bộ biến động kho...');
+    } else {
+      const p = MOCK_DB.find(x => x.id === productId);
+      addStep('Đang đối soát số liệu cho ' + (p?.name || 'sản phẩm') + '...');
+    }
+    await delay(1200);
+    updateLastStep('done');
+
+    const productsToRecon = productId ? MOCK_DB.filter(p => p.id === productId) : MOCK_DB.slice(0, 5);
+
+    addStep(
+      <div className='reconciliation-hub-elite elite-glass fade-in'>
+         <div className='recon-header'>
+            <ShieldCheck size={20} className='text-emerald-400' />
+            <span>TRUNG TÂM ĐỐI SOÁT & MINH BẠCH</span>
+         </div>
+         
+         <div className='recon-body'>
+            {productsToRecon.map(p => {
+               const sales = SALES_HISTORY_AGGREGATE.find(s => s.productId === p.id);
+               const inputs = INPUT_INVOICES.filter(i => i.productId === p.id);
+               const totalIn = inputs.reduce((a, b) => a + b.qty, 0);
+               const totalOut = sales?.totalSold || 0;
+               const diff = totalIn - totalOut;
+               const isAlert = diff < 0;
+
+               return (
+                  <div className={'recon-item-card ' + (isAlert ? 'alert' : '')} key={'recon-' + p.id}>
+                     <div className='p-header'>
+                        <span className='p-name'>{p.emoji} {p.name}</span>
+                        {isAlert && <div className='alert-badge'><AlertCircle size={10} /> LỆCH KHO</div>}
+                     </div>
+                     <div className='p-stats'>
+                        <div className='stat'><span>Nhập:</span> <strong>{totalIn}</strong></div>
+                        <div className='stat'><span>Bán:</span> <strong>{totalOut}</strong></div>
+                        <div className='stat highlight'><span>Tồn:</span> <strong className={isAlert ? 'text-red-500' : ''}>{diff}</strong></div>
+                     </div>
+                     {isAlert && (
+                        <div className='recon-advice'>
+                           <Info size={12} /> Phát hiện bán quá số lượng nhập. Vui lòng kiểm tra hóa đơn bù.
+                        </div>
+                     )}
+                  </div>
+               );
+            })}
+         </div>
+
+         <div className='recon-footer mt-4'>
+            <button className='recon-btn-full' onClick={() => setIsExpanded(false)}>
+               Hoàn tất đối soát
+            </button>
+         </div>
+      </div>, 'result'
+    );
+    setAiState(AI_STATE.DONE);
+  };
+
+  const handleSessionHistory = async () => {
+    setAiState(AI_STATE.PROCESSING);
+    addStep('Đang trích xuất nhật ký phiên làm việc...');
+    await delay(800);
+    updateLastStep('done');
+
+    addStep(
+      <div className='session-history-card premium-glass fade-in'>
+         <div className='history-header'>
+            <History size={18} className='text-blue-600' />
+            <span>NHẬT KÝ PHIÊN (AUDIT LOG)</span>
+         </div>
+         
+         <div className='history-timeline mt-4'>
+            {sessionHistory.length > 0 ? (
+               sessionHistory.map((log, idx) => (
+                  <div className='history-log-item' key={'log-' + idx}>
+                     <div className='log-time'>{log.timestamp}</div>
+                     <div className='log-action'>{log.action}</div>
+                     <div className='log-details'>{log.details}</div>
+                  </div>
+               )).reverse()
+            ) : (
+               <div className='text-center py-4 text-gray-400'>Chưa có hoạt động nào được ghi lại.</div>
+            )}
+         </div>
+         
+         <div className='history-footer mt-4'>
+            <button className='history-btn outline' onClick={() => setIsExpanded(false)}>Đóng</button>
+         </div>
+      </div>, 'result'
+    );
+    setAiState(AI_STATE.DONE);
+  };
+
   const renderStrategicDashboard = () => {
     return (
-      <div className="strategic-dashboard fade-in">
+      <>
         <div className="dashboard-title-area">
           <small className="text-blue-600 font-bold uppercase tracking-widest">Định hướng chiến lược</small>
           <h3>Gợi ý hành động hôm nay</h3>
@@ -631,7 +770,7 @@ const BanHang = () => {
 
         {/* Legacy Quick CTAs */}
         <div className="onboarding-suggestions mt-10">
-          <p className="suggestion-label mb-3">Thao tác nhanh:</p>
+          <p className="suggestion-label mb-3"></p>
           <div className="suggestion-grid">
             <div className="suggest-card-premium" onClick={() => simulateProcessing("Bán cho khách 2 vỉ trứng gà")}>
               <div className="suggest-icon bg-blue-50 text-blue-600"><ShoppingBag size={18} /></div>
@@ -669,7 +808,7 @@ const BanHang = () => {
               <Mic size={18} /> Bán hàng bằng giọng nói
            </button>
         </div> */}
-      </div>
+      </>
     );
   };
 
@@ -1305,11 +1444,6 @@ const BanHang = () => {
     setAiState(AI_STATE.DONE);
   };
 
-  const removeCartItem = (id) => {
-    setActiveCart(prev => prev.filter(item => item.id !== id));
-    setCartCount(prev => Math.max(0, prev - 1));
-  };
-
   const handleEditOrder = async () => {
     setAiState(AI_STATE.PROCESSING);
     addStep("Đang mở chế độ chỉnh sửa đơn hàng...");
@@ -1334,488 +1468,152 @@ const BanHang = () => {
     alert("Đã mở trình chia sẻ hệ thống!");
   };
 
-
-
   const handleOOSFlow = async (productName = "Sản phẩm") => {
     setAiState(AI_STATE.PROCESSING);
-    setOosProduct(productName); // Lock the context for restocking
+    setOosProduct(productName);
     setIsExpanded(true);
-
     addStep("Đang kiểm tra tồn kho chi tiết...");
     await delay(1000);
     updateLastStep('done');
 
     addStep(
-      <div className="oos-alert-card">
-         <div className="oos-header flex-center">
+      <div className="oos-alert-card premium-glass fade-in">
+         <div className="oos-header flex items-center gap-2">
             <AlertTriangle size={20} color="#EF4444" />
-            <h4 className="oos-title">Hết hàng trong kho</h4>
+            <h4 className="oos-title text-red-600 font-bold">Hết hàng trong kho</h4>
          </div>
-         <p className="oos-desc">Sản phẩm <strong>{productName}</strong> hiện tại có tồn kho bằng 0.</p>
-         
-         <div className="oos-supplier-list">
-            <div className="oos-supplier-item">
+         <p className="oos-desc mt-2">Sản phẩm <strong>{productName}</strong> hiện có tồn kho bằng 0.</p>
+         <div className="oos-supplier-list mt-4 flex flex-col gap-2">
+            <div className="oos-supplier-item p-3 rounded-lg border border-gray-100 flex justify-between items-center">
                <div className="ncc-info">
-                  <span className="ncc-name">NCC Tổng hợp Miền Bắc</span>
-                  <span className="ncc-price">Giá nhập: --.---₫</span>
+                  <span className="ncc-name block font-semibold">NCC Tổng hợp Miền Bắc</span>
+                  <span className="ncc-price text-sm text-gray-500">Giá nhập: --.---₫</span>
                </div>
-               <button className="ncc-btn">Đặt hàng</button>
-            </div>
-            <div className="oos-supplier-item">
-               <div className="ncc-info">
-                  <span className="ncc-name">Đại lý phân phối ECO</span>
-                  <span className="ncc-price">Giá tốt: Ưu đãi</span>
-               </div>
-               <button className="ncc-btn">Đặt hàng</button>
+               <button className="ncc-btn bg-blue-600 text-white px-3 py-1 rounded text-sm">Đặt hàng</button>
             </div>
          </div>
-      </div>,
-      'result',
-      'oos'
+      </div>, 'result'
     );
-    await delay(1000);
-    setLastActionType('OOS');
     setAiState(AI_STATE.DONE);
   };
 
   const simulateProcessing = async (text = "Voice command") => {
     try {
-      // Show user transcript as a chat bubble first
       addStep(text, 'result', 'user');
       if (aiState === AI_STATE.PROCESSING) return;
       setAiState(AI_STATE.PROCESSING);
       setIsExpanded(true);
-    await delay(600);
-    
-    const lowerText = text.toLowerCase();
-    
-    // NEW: Define clear intents globally
-    const isInventoryReport = lowerText.includes('kiểm') || lowerText.includes('báo cáo') || lowerText.includes('tình hình');
-    const isRestockIntent = (lowerText.includes('nhập') || lowerText.includes('bổ sung') || lowerText.includes('đặt hàng')) && !isInventoryReport;
-    const isTransferIntent = lowerText.includes('điều chuyển') || lowerText.includes('chuyển kho') || lowerText.includes('chuyển sang');
-    const isSaleIntent = (lowerText.includes('mua') || lowerText.includes('bán') || lowerText.includes('lấy') || (lowerText.includes('thêm') && !isRestockIntent && !isTransferIntent));
-    
-    // 0. PRIORITY: Inventory Report / Analytics
-    if (isInventoryReport && (lowerText.includes('kho') || lowerText.includes('tồn'))) {
-      return handleInventoryReport();
-    }
+      await delay(600);
+      
+      const lowerText = text.toLowerCase();
+      
+      // --- INTENT DETECTION (High Priority) ---
+      const isHistoryIntent = lowerText.includes('lịch sử') || lowerText.includes('nhật ký') || lowerText.includes('xem lại');
+      const isInventoryReport = lowerText.includes('kiểm') || lowerText.includes('báo cáo');
+      const isAccountingAudit = lowerText.includes('giá nhập') || lowerText.includes('giá mua') || lowerText.includes('truy xuất') || 
+                               (lowerText.includes('hóa đơn') && (lowerText.includes('nhập') || lowerText.includes('đầu vào')));
+      const isReconDashboard = lowerText.includes('đối soát') || lowerText.includes('so khớp');
 
-    // 1. SMART CONTEXTUAL HANDLING (Strict Mode Locking)
-    if (aiState === AI_STATE.STOCK_ENTRY || isRestockIntent) {
-      // Force all detection into Restocking logic
-      const detectedItems = MOCK_DB.filter(item => 
-        item.keywords.some(k => lowerText.includes(k.toLowerCase())) || 
-        lowerText.includes(item.name.toLowerCase())
-      );
+      // 0. Accounting Hub (Priority over Sales if specific keywords match)
+      if (isHistoryIntent) return handleSessionHistory();
       
-      const qty = parseVietnameseQuantity(text);
-      
-      if (detectedItems.length > 0) {
-        // If multiple, use the first one or queue them
-        const primary = detectedItems[0];
-        setOosProduct(primary.name);
-        if (qty !== null) {
-           addStep(`Nhận diện Lệnh Nhập Kho: ${primary.name} + Số lượng: ${qty}`, 'done');
-           return handleStockConfirm(qty);
-        } else {
-           addStep(`Nhận diện sản phẩm nhập: ${primary.name}. Anh/Chị muốn nhập bao nhiêu ạ?`, 'done');
-           return handleQuickStockEntry(); 
+      if (isAccountingAudit) {
+        let monthMatch = null;
+        const months = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+        const monthNames = ['một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín', 'mười'];
+        
+        // Dynamic time detection
+        if (lowerText.includes('tháng này')) monthMatch = (new Date().getMonth() + 1).toString();
+        else {
+          months.forEach(m => { if (lowerText.includes(`tháng ${m}`)) monthMatch = m; });
+          monthNames.forEach((n, idx) => { if (lowerText.includes(`tháng ${n}`)) monthMatch = (idx + 1).toString(); });
         }
-      } else if (qty !== null && oosProduct) {
-        addStep(`Phát hiện số lượng nhập cho ${oosProduct}: ${qty}`, 'done');
-        return handleStockConfirm(qty);
-      }
-      
-      // If no product detected but explicitly said 'nhập', ask for product
-      if (isRestockIntent) {
-        addStep("Anh/Chị muốn nhập kho sản phẩm nào ạ? Em đã mở chế độ Nhập Kho.", 'done');
-        return handleQuickStockEntry();
-      }
-    }
 
-    // 1.1 STOCK TRANSFER INTENT
-    if (aiState === AI_STATE.STOCK_TRANSFER || isTransferIntent) {
-      const detectedItems = MOCK_DB.filter(item => 
-        item.keywords.some(k => lowerText.includes(k.toLowerCase())) || 
-        lowerText.includes(item.name.toLowerCase())
-      );
-      const qty = parseVietnameseQuantity(text);
-      
-      // Branch detection
-      const branchMatch = text.match(/chi nhánh (\d+)/i);
-      if (branchMatch) {
-         setTargetBranch(`Chi nhánh ${branchMatch[1]}`);
+        // IMPROVED MATCH LOGIC: Check for longest keyword match or exact match
+        const matches = MOCK_DB.filter(item => 
+           item.keywords.some(k => lowerText.includes(k.toLowerCase())) || 
+           lowerText.includes(item.name.toLowerCase())
+        );
+        
+        // Prioritize by length of match to avoid "táo" matching "trứng" if they ever collide (unlikely but safe)
+        const bestMatch = matches.length > 0 ? matches.reduce((prev, curr) => {
+          const prevLen = prev.name.length;
+          const currLen = curr.name.length;
+          return (lowerText.includes(curr.name.toLowerCase()) && currLen > prevLen) ? curr : prev;
+        }) : null;
+
+        if (bestMatch) return handleProductCostAudit(bestMatch.id, monthMatch);
+        return handleReconciliationDashboard(); // Fallback if no product named
       }
 
-      if (detectedItems.length > 0) {
-        const primary = detectedItems[0];
-        setTransferProduct(primary);
-        if (qty !== null) {
-          setTransferQty(qty);
-          addStep(`Nhận diện Lệnh Chuyển Kho: ${primary.name} x${qty} sang ${branchMatch ? `Chi nhánh ${branchMatch[1]}` : targetBranch}`, 'done');
-          return handleStockTransfer(primary, qty);
-        } else {
-          addStep(`Đã chọn sản phẩm: ${primary.name}. Anh/Chị muốn chuyển bao nhiêu ạ?`, 'done');
-          return handleStockTransfer(primary, transferQty);
-        }
-      } else if (qty !== null && transferProduct) {
-         setTransferQty(qty);
-         addStep(`Cập nhật số lượng chuyển: ${qty}`, 'done');
-         return handleStockTransfer(transferProduct, qty);
-      }
+      if (isReconDashboard) return handleReconciliationDashboard();
 
-      if (isTransferIntent) {
-        addStep("Anh/Chị muốn điều chuyển sản phẩm nào và sang chi nhánh mấy ạ?", 'done');
-        return handleStockTransfer();
-      }
-    }
+      if (isInventoryReport && (lowerText.includes('kho') || lowerText.includes('tồn'))) return handleInventoryReport();
 
-    // 2. ACTION INTENTS (Strict Matching) - Check these before product detection to avoid overlap
-    if (lowerText.includes('chốt đơn') || lowerText.includes('thanh toán') || lowerText.includes('trả tiền')) {
-      return handleCheckoutIntent();
-    }
-
-    if (lowerText.includes('hủy') || lowerText.includes('xóa giỏ') || lowerText.includes('làm mới')) {
-      addStep("Đang hủy giỏ hàng hiện tại...");
-      await delay(800);
-      resetSession();
-      updateLastStep('done');
-      addStep("Dạ, em đã làm mới session. Giỏ hàng hiện đã trống, sẵn sàng cho đơn hàng mới của Anh/Chị ạ!", 'result', 'success');
-      return setAiState(AI_STATE.DONE);
-    }
-    
-    // NEW: Reporting Specific Intents
-    if (lowerText.includes('báo cáo') || lowerText.includes('thống kê') || lowerText.includes('thuế') || lowerText.includes('két tiền')) {
-       if (lowerText.includes('thuế')) {
-          addStep("Đang trích xuất dữ liệu kê khai thuế quý này...");
-          setAiState(AI_STATE.PROCESSING);
-          await delay(1500);
-          updateLastStep('done');
-          addStep(
-            <div className="tax-report-elite premium-glass">
-               <div className="elite-card-header">
-                  <ShieldCheck size={18} className="text-red-500" />
-                  <span>BÁO CÁO THUẾ Q2/2024</span>
-               </div>
-               <div className="tax-grid-detailed mt-4">
-                  <div className="tax-item">
-                     <p>Tổng doanh thu</p>
-                     <strong>152.400.000đ</strong>
-                  </div>
-                  <div className="tax-item">
-                     <p>Thuế GTGT (10%)</p>
-                     <strong>15.240.000đ</strong>
-                  </div>
-                  <div className="tax-item">
-                     <p>Lợi nhuận ròng</p>
-                     <strong>48.600.000đ</strong>
-                  </div>
-                  <div className="tax-item">
-                     <p>Hạn nộp</p>
-                     <strong className="text-red-500">31/07/2024</strong>
-                  </div>
-               </div>
-               <div className="tax-compliance-badge mt-4">
-                  <CheckCircle2 size={12} />
-                  Dữ liệu đã được đồng bộ với Tổng cục Thuế
-               </div>
-               <button className="elite-primary-btn mt-4">Kết xuất Tờ khai PDF</button>
-            </div>, 'result'
-          );
-          return setAiState(AI_STATE.DONE);
-       }
-       
-       if (lowerText.includes('thống kê') || lowerText.includes('số liệu')) {
-          addStep("Đang tổng hợp số liệu kinh doanh hôm nay...");
-          setAiState(AI_STATE.PROCESSING);
-          await delay(1200);
-          updateLastStep('done');
-          addStep(
-            <div className="stats-dashboard-premium premium-glass">
-               <div className="stats-header-row">
-                  <div className="stats-main-val">
-                     <p>Doanh thu hôm nay</p>
-                     <h3>8.420.000đ</h3>
-                     <span className="growth-indicator positive">
-                        <TrendingUp size={12} /> +12% so với hôm qua
-                     </span>
-                  </div>
-                  <div className="stats-orders-circle">
-                     <strong>42</strong>
-                     <span>Đơn hàng</span>
-                  </div>
-               </div>
-               
-               <div className="stats-chart-mini mt-6">
-                  <div className="chart-bar-container">
-                     {[45, 60, 85, 40, 95, 70, 80].map((h, i) => (
-                        <div key={i} className="chart-bar-item">
-                           <div className="bar-fill" style={{ height: `${h}%` }}></div>
-                           <span>T{i+2}</span>
-                        </div>
-                     ))}
-                  </div>
-               </div>
-               
-               <div className="stats-top-products mt-4">
-                  <p className="mini-label">Bán chạy nhất:</p>
-                  <div className="top-item-row">
-                     <span>1. Nước mắm Nam Ngư</span>
-                     <strong>12 chai</strong>
-                  </div>
-                  <div className="top-item-row">
-                     <span>2. Trứng gà ta</span>
-                     <strong>8 vỉ</strong>
-                  </div>
-               </div>
-            </div>, 'result'
-          );
-          return setAiState(AI_STATE.DONE);
-       }
-
-       if (lowerText.includes('két')) {
-          addStep("Đang kiểm số dư két tiền mặt...");
-          setAiState(AI_STATE.PROCESSING);
-          await delay(1000);
-          updateLastStep('done');
-          addStep(
-            <div className="cash-audit-elite premium-glass">
-               <div className="audit-header">
-                  <Banknote size={20} className="text-green-500" />
-                  <span>KIỂM KÉT TIỀN MẶT</span>
-               </div>
-               <div className="cash-main-total mt-4">
-                  <small>Tổng tiền trong két</small>
-                  <h3>12.500.000đ</h3>
-               </div>
-               <div className="cash-breakdown mt-4">
-                  <div className="bd-row"><span>Tiền đầu ca:</span> <strong>2.000.000đ</strong></div>
-                  <div className="bd-row"><span>Bán hàng (mặt):</span> <strong>10.500.000đ</strong></div>
-                  <div className="bd-row"><span>Rút tiền:</span> <strong className="text-red-500">0đ</strong></div>
-               </div>
-               <div className="audit-actions-row mt-6">
-                  <button className="audit-btn outline">Lịch sử két</button>
-                  <button className="audit-btn primary">Chốt két & In</button>
-               </div>
-            </div>, 'result'
-          );
-          return setAiState(AI_STATE.DONE);
-       }
-
-       // DEEP DRILL-DOWN VOICE HANDLER
-       if (lowerText.includes('chi tiết') || lowerText.includes('tiếp theo') || lowerText.includes('bước')) {
-          // Stats Flow Keywords
-          if (lowerText.includes('2') || lowerText.includes('cơ cấu') || lowerText.includes('ngành hàng')) return handleGlobalReporting(2);
-          if (lowerText.includes('3') || lowerText.includes('giờ cao điểm') || lowerText.includes('thời gian')) return handleGlobalReporting(3);
-          if (lowerText.includes('4') || lowerText.includes('gợi ý ai') || lowerText.includes('bất thường')) return handleGlobalReporting(4);
-          if (lowerText.includes('5') || lowerText.includes('chiến lược') || lowerText.includes('hành động')) return handleGlobalReporting(5);
-          
-          // Cash Flow Keywords
-          if (lowerText.includes('két') || lowerText.includes('tiền mặt')) return handleGlobalReporting(21);
-          if (lowerText.includes('biến động ca')) return handleGlobalReporting(22);
-          if (lowerText.includes('lịch sử két')) return handleGlobalReporting(23);
-          if (lowerText.includes('đối soát két')) return handleGlobalReporting(24);
-          if (lowerText.includes('chốt ca')) return handleGlobalReporting(25);
-
-          // Default sequential progression
-          const currentStepIndicator = processSteps.find(s => s.content?.props?.className?.includes('step-indicator'))?.content?.props?.children;
-          if (currentStepIndicator) {
-             const currentStepMatch = currentStepIndicator.match(/\d/);
-             const currentStep = currentStepMatch ? parseInt(currentStepMatch[0]) : 0;
-             const isTaxFlow = currentStepIndicator.includes('THUẾ');
-             const isCashFlow = currentStepIndicator.includes('TIỀN MẶT') || currentStepIndicator.includes('CA') || currentStepIndicator.includes('KÉT');
-             
-             if (isTaxFlow && currentStep < 5) return handleGlobalReporting(10 + currentStep + 1);
-             if (isCashFlow && currentStep < 5) return handleGlobalReporting(20 + currentStep + 1);
-             if (!isTaxFlow && !isCashFlow && currentStep < 5) return handleGlobalReporting(currentStep + 1);
-          }
-       }
-
-       return handleGlobalReporting();
-    }
-
-    // Move Layout/Combo intents AFTER product detection section for better combined handling
-
-    if (lowerText.includes('in hoá đơn') || lowerText.includes('xuất hoá đơn') || lowerText.includes('in phiếu')) {
-      return handlePrintIntent();
-    }
-    if (lowerText.includes('qr') || lowerText.includes('chuyển khoản')) {
-      return handleQRIntent();
-    }
-    if (lowerText.includes('thuế')) {
-      addStep("Đang truy xuất dữ liệu thuế niên độ hiện tại...");
-      await delay(1200);
-      updateLastStep('done');
-      addStep("Em đã mở mục Quản lý thuế. Anh/Chị có muốn xem báo cáo thuế quý này hay xuất tờ khai không ạ?", 'result');
-      return setAiState(AI_STATE.DONE);
-    }
-    if (lowerText.includes('két tiền') || lowerText.includes('kết số dư')) {
-      addStep("Đang kiểm tra kết số dư két tiền mặt...");
+      // 1. Order Flow
+      addStep("Đang quét giỏ hàng & tồn kho...");
       await delay(1000);
       updateLastStep('done');
-      addStep("Dạ, em thấy số dư két hiện tại là 12,500,000đ. Anh/Chị có muốn thực hiện rút tiền hay nạp thêm vào két không?", 'result');
-      return setAiState(AI_STATE.DONE);
-    }
 
-    if (lowerText.includes('review') || lowerText.includes('lịch sử') || lowerText.includes('thống kê')) {
-      addStep("Đang tổng hợp lịch sử phiên làm việc...");
-      await delay(1200);
-      updateLastStep('done');
-      
-      if (sessionHistory.length === 0) {
-        addStep("Dạ, em chưa ghi nhận hành động nào trong phiên này. Anh/Chị muốn bắt đầu bán hàng hay kiểm kho không?", 'result');
-      } else {
-        addStep(
-          <div className="session-log-card">
-            <div className="log-header"><History size={16} /> Lịch sử vận hành (Session)</div>
-            <div className="log-list">
-               {sessionHistory.map((log, idx) => (
-                 <div className="log-item" key={`log-${idx}`}>
-                    <small className="log-time">{log.timestamp}</small>
-                    <div className="log-main">
-                      <span className="log-action">{log.action}</span>
-                      <span className="log-details">{log.details}</span>
-                    </div>
-                 </div>
-               ))}
-            </div>
-            <div className="log-footer">
-               Tổng số hành động: {sessionHistory.length}
-            </div>
-          </div>,
-          'result'
+      const segments = lowerText.split(/,| và |\. | rồi /);
+      const detected = [];
+      segments.forEach(segment => {
+        const segQty = parseVietnameseQuantity(segment);
+        const match = MOCK_DB.find(item => 
+           item.keywords.some(k => segment.includes(k.toLowerCase())) || 
+           segment.includes(item.name.toLowerCase())
         );
-      }
-      return setAiState(AI_STATE.DONE);
-    }
+        if (match) detected.push({ ...match, detectedQty: segQty || 1 });
+      });
 
-    if (lowerText.includes('tồn kho') || lowerText.includes('kiểm kho') || lowerText.includes('sản phẩm bán chạy')) {
-      return handleInventoryReport();
-    }
-
-    // 3. PRODUCT ENTITY RESOLUTION & ORDER ORCHESTRATION
-    addStep("Đang quét giỏ hàng & tồn kho...");
-    await delay(1000);
-    updateLastStep('done');
-
-    // REDESIGNED: Multi-Item Segmented Parsing (Highly Robust)
-    const segments = lowerText.split(/,| và |\. | rồi /);
-    const detected = [];
-    
-    segments.forEach(segment => {
-      const segQty = parseVietnameseQuantity(segment);
-      // Find the best match in this specific segment
-      const match = MOCK_DB.find(item => 
-         item.keywords.some(k => segment.includes(k.toLowerCase())) || 
-         segment.includes(item.name.toLowerCase())
-      );
-      if (match) {
-         detected.push({ ...match, detectedQty: segQty || 1 });
-      }
-    });
-
-    if (detected.length > 0) {
-      setPendingOrder(detected);
-      const inStock = detected.filter(i => i.stock > 0);
-      const outOfStock = detected.filter(i => i.stock === 0);
-
-      // Distinguish between Sales Intent and Restock Intent
-
-      // Handle Simultaneous Batch Restocking ONLY if it's an explicit Restock Intent
-      if (isRestockIntent) return;
-      if (false) {
-         addStep(
-           <div className="batch-success-card">
-              <div className="batch-header"><CheckSquare size={18} /> Đã nhận diện lệnh nhập kho đồng thời</div>
-              <div className="batch-list">
-                 {batchRestock.map(br => (
-                   <div className="batch-item" key={`batch-${br.id}`}>
-                      <span>{br.name}</span> <ArrowRight size={14} /> <span>+{br.detectedQty}</span>
-                   </div>
-                 ))}
-              </div>
-           </div>,
-           'result',
-           'success'
-         );
-         await delay(1200);
-         // Filter out items already batch-restocked from the sequential queue
-         const remainingOos = outOfStock.filter(i => i.detectedQty === null);
-         
-         if (remainingOos.length > 0) {
-            setOosQueue(remainingOos);
-            setOosProduct(remainingOos[0].name);
-            return handleOOSFlow(remainingOos[0].name);
-         } else {
-            return finalizeOrderFlow(detected);
-         }
-      }
-
-      if (outOfStock.length > 0) {
-        // Find alternatives for OOS items
-        const suggestions = outOfStock.map(oos => ({
-          original: oos,
-          alternatives: MOCK_DB.filter(i => i.category === oos.category && i.stock > 0).slice(0, 2)
-        }));
-
-        addStep(
-          <div className="detected-text">
-            Phát hiện: <span className="font-bold text-blue-600">{detected.map(i => i.name).join(", ")}</span>. <br/>
-            {outOfStock.length > 0 && <span className="text-red-500 font-bold">⚠️ Có {outOfStock.length} mục thiếu hàng.</span>}
-          </div>, 
-          'result'
-        );
-        await delay(800);
-
-        if (suggestions.some(s => s.alternatives.length > 0)) {
-           addStep(
-             <div className="alternatives-container fade-in">
-               <div className="alt-title">Gợi ý thay thế còn hàng:</div>
-               <div className="alt-list swipe-x">
-                  {suggestions.flatMap(s => s.alternatives).map(alt => (
-                    <div className="alt-card" key={`alt-${alt.id}`} onClick={() => { addStep(`Đã đổi sang ${alt.name}`, 'done'); setSelectedAlt(alt); }}>
-                      <span className="alt-emoji">{alt.emoji}</span>
-                      <span className="alt-name">{alt.name}</span>
-                      <span className="alt-stock">Tồn: {alt.stock}</span>
-                    </div>
-                  ))}
-               </div>
-             </div>,
-             'result'
-           );
-           await delay(1000);
+      // Unit conversion
+      detected.forEach(item => {
+        const segment = segments.find(s => item.keywords.some(k => s.toLowerCase().includes(k.toLowerCase())));
+        if (segment && (segment.toLowerCase().includes('kg') || segment.toLowerCase().includes('kí'))) {
+           const weightVal = parseVietnameseQuantity(segment);
+           if (item.weightPerUnit && item.weightPerUnit < 1) {
+              item.detectedQty = Math.ceil(weightVal / item.weightPerUnit);
+              addStep(`💡 Quy đổi: ${weightVal}kg = ${item.detectedQty} ${item.unit}`, 'done');
+           } else {
+              item.detectedQty = weightVal;
+           }
         }
+      });
 
-        // Start restocking flow for the first OOS item
-        const firstOos = outOfStock[0];
-        const remainingQueue = outOfStock.slice(1);
-        setOosQueue(remainingQueue);
-        setOosProduct(firstOos.name);
-        
-        return handleOOSFlow(firstOos.name);
-      } else {
-        // All items in stock - proceed normally
-        const cartSnapshot = await finalizeOrderFlow(detected);
-        
-        // POST-DETECTION: Check if the user ALSO wanted to wrap/pack this
-        if (lowerText.includes('gói quà') || lowerText.includes('giỏ quà') || lowerText.includes('đóng giỏ') || lowerText.includes('giỏi')) {
-           return handleDynamicWrapping(cartSnapshot);
+      if (detected.length > 0) {
+        const finalToCart = [];
+        detected.forEach(dt => {
+          if (dt.isCombo) {
+            addStep(`🧩 Tách Combo: ${dt.name}...`);
+            dt.specs.forEach(spec => {
+               const specItem = MOCK_DB.find(m => m.id === spec.id);
+               if (specItem) finalToCart.push({ ...specItem, detectedQty: spec.qty * dt.detectedQty });
+            });
+            updateLastStep('done');
+          } else {
+            finalToCart.push(dt);
+          }
+        });
+
+        if (finalToCart.length > 0) {
+          const outOfStock = finalToCart.filter(i => i.stock === 0);
+          if (outOfStock.length > 0) {
+            return handleOOSFlow(outOfStock[0].name);
+          } else {
+            const cartSnapshot = await finalizeOrderFlow(finalToCart);
+            if (lowerText.includes('giỏ quà') || lowerText.includes('gói quà')) return handleDynamicWrapping(cartSnapshot);
+            return;
+          }
         }
-        return;
       }
-    }
 
-    // CHECK INTENTS THAT MIGHT HAVE BEEN SKIPPED
-    if (lowerText.includes('gói quà') || lowerText.includes('giỏ quà') || lowerText.includes('đóng giỏ') || lowerText.includes('giỏi')) {
-       return handleDynamicWrapping();
-    }
-
-    addStep("Xin lỗi, em chưa tìm thấy sản phẩm này trong kho. Anh/Chị có muốn em tìm kiếm trên danh mục NCC không?", 'result');
-    setAiState(AI_STATE.DONE);
+      // Default
+      addStep("Xin lỗi, em chưa tìm thấy sản phẩm này.", 'result');
+      setAiState(AI_STATE.DONE);
     } catch (error) {
-       console.error("AI Processing Error:", error);
-       addStep("Dạ, bộ não của em đang gặp chút trục trặc khi xử lý câu lệnh này. Em đã đặt lại trạng thái để phục vụ Anh/Chị tiếp ạ!", 'result', 'error');
-       setAiState(AI_STATE.DONE);
+      console.error("AI Error:", error);
+      addStep("Dạ, bộ não của em đang gặp chút trục trặc.", 'result', 'error');
+      setAiState(AI_STATE.DONE);
     }
   };
 
