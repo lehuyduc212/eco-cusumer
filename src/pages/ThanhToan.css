@@ -1,0 +1,262 @@
+.thanh-toan-page {
+  padding-bottom: 80px; /* Space for bottom nav */
+  background-color: var(--white);
+  min-height: 100vh;
+}
+
+/* Header Section (Same styling as DichVu) */
+.tt-header {
+  background: linear-gradient(135deg, #0159a9 0%, #0155a3 100%);
+  position: relative;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  padding-bottom: 40px;
+  overflow: hidden;
+}
+
+.tt-header::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 200, 0, 0.9) 100%);
+  z-index: 0;
+  border-top-left-radius: 100%;
+}
+
+.tt-header > * {
+  position: relative;
+  z-index: 1;
+}
+
+.status-bar.white-text {
+  color: white;
+  padding: 12px 16px;
+}
+
+.tt-user-info {
+  padding: 10px 16px;
+}
+
+/* Reuse avatar/user details styles from index or duplicate here if needed. 
+To keep things isolated and easy as requested, duplicating the necessary few classes. */
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  background-color: rgba(255,255,255,0.8);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+}
+
+.avatar-icon {
+  color: var(--primary-blue);
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.user-name {
+  color: white;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.user-exu {
+  background-color: rgba(0,0,0,0.2);
+  border-radius: 12px;
+  padding: 2px 8px;
+}
+
+.exu-icon {
+  background-color: #FACC15;
+  color: white;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 6px;
+  font-weight: bold;
+}
+
+.exu-balance {
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.header-actions .icon-btn {
+  background: none;
+  border: none;
+  margin-left: 12px;
+}
+
+.tt-quick-actions {
+  padding: 16px 20px 24px;
+}
+
+.quick-action-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+}
+
+.action-icon-wrapper {
+  width: 44px;
+  height: 44px;
+  background-color: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(4px);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.action-name {
+  color: white;
+  font-size: 11px;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* Overlapping Balance Card */
+.tt-balance-card {
+  position: absolute;
+  bottom: -20px; /* Offset to overlap */
+  left: 16px;
+  right: 16px;
+  background-color: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  min-height: 60px;
+}
+
+.eco-logo-small {
+  width: 24px;
+  height: 24px;
+  background-color: #0078FF;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+}
+
+.cube-icon {
+  width: 12px;
+  height: 12px;
+  border: 2px solid white;
+}
+
+.balance-label {
+  font-weight: 500;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.balance-amount {
+  font-weight: 700;
+  font-size: 16px;
+  margin-right: 8px;
+}
+
+.alert-icon {
+  margin-right: 4px;
+}
+
+/* Main Content */
+.tt-content {
+  padding: 40px 16px 16px; /* 40px top padding to accommodate overlapping card */
+}
+
+/* Services Section */
+.services-section h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: var(--text-primary);
+  position: relative;
+  padding-bottom: 8px;
+}
+
+.services-section h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background-color: var(--primary-blue);
+}
+
+.mt-4 {
+  margin-top: 32px;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  row-gap: 28px;
+}
+
+.service-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.service-icon-container {
+  font-size: 32px;
+  margin-bottom: 12px;
+  color: var(--primary-blue);
+}
+
+.service-icon {
+  width: 32px;
+  height: 32px;
+  stroke-width: 1.5;
+}
+
+.thu-ho-icon-container {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.partner-logo {
+  font-size: 14px;
+  text-align: center;
+}
+
+.text-green { color: #16a34a; }
+.text-red { color: #dc2626; }
+.text-blue { color: #2563eb; }
+
+.service-name {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.flex-center-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}

@@ -1,0 +1,261 @@
+.khac-page {
+  padding-bottom: 80px; /* Space for bottom nav */
+  background-color: white; /* Base is white */
+  min-height: 100vh;
+}
+
+/* Header with subtle gradient curve */
+.kh-header-bg {
+  padding-bottom: 32px;
+  position: relative;
+  /* Simulating the faint cream/pink curve on top left */
+  background: radial-gradient(circle at 10% 20%, #FFF5F0 0%, #FFFFFF 60%);
+  min-height: 160px;
+}
+
+.status-bar.text-dark {
+  color: var(--text-primary);
+  padding: 12px 16px;
+}
+
+.kh-profile-info {
+  padding: 24px 20px 12px;
+}
+
+.user-name {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.user-phone {
+  font-size: 15px;
+  font-weight: 500;
+  color: #4B5563; /* slightly lighter than primary */
+}
+
+.profile-avatar-large {
+  width: 64px;
+  height: 64px;
+  background-color: #F3F4F6;
+  border-radius: 50%;
+  border: 1px solid #E5E7EB;
+}
+
+/* Content Area */
+.kh-content-area {
+  padding: 0 16px;
+  position: relative;
+  z-index: 5;
+  margin-top: -30px; /* Pull order card up */
+}
+
+/* Tracking Card */
+.order-tracking-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+  border: 1px solid #F3F4F6;
+  padding-top: 20px;
+  margin-bottom: 24px;
+  /* background curve in the card to match design slightly */
+  background-image: radial-gradient(circle at 90% 10%, #FFFDF5 0%, #FFFFFF 40%);
+}
+
+.tracking-steps {
+  padding: 0 32px 16px;
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.step-label {
+  font-size: 11px;
+  color: var(--text-primary);
+  font-weight: 500;
+  margin-top: 8px;
+}
+
+.tracking-footer {
+  padding: 12px 16px;
+  border-top: 1px solid #F3F4F6;
+  background-color: rgba(249, 250, 251, 0.5);
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.footer-link {
+  font-size: 13px;
+  color: #6B7280;
+  font-weight: 500;
+}
+
+/* Invalid Alert */
+.invalid-info-alert {
+  background-color: #FEF2F2; /* Light red */
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.alert-content {
+  align-items: flex-start;
+  z-index: 2;
+}
+
+.alert-icon {
+  flex-shrink: 0;
+  margin-right: 12px;
+}
+
+.alert-text {
+  font-size: 13px;
+  color: #DC2626; /* solid red */
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.watermark-icon {
+  position: absolute;
+  right: -8px;
+  bottom: -10px;
+  z-index: 1;
+}
+
+/* Nguồn tiền */
+.funds-section {
+  margin-bottom: 8px;
+}
+
+.funds-section .section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  text-transform: none;
+}
+
+.wallet-card {
+  background-color: #E0F2FE; /* Light blue */
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.align-end {
+  align-items: flex-end;
+}
+
+.mt-4 {
+  margin-top: 16px;
+}
+
+.eco-brand-small {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.cube-mini {
+  width: 16px;
+  height: 16px;
+  background-color: #0056D2;
+  border: 2px solid white;
+  border-radius: 4px;
+  margin-right: 8px;
+}
+
+.eco-text {
+  font-size: 18px;
+  color: #0056D2;
+  font-weight: 800;
+  font-style: italic;
+}
+
+.wallet-label {
+  font-size: 14px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.wallet-amount {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-right: 8px;
+}
+
+.exclamation-circle {
+  width: 16px;
+  height: 16px;
+  background-color: #F97316; /* Orange */
+  border-radius: 50%;
+  margin-bottom: 4px; /* Align slightly up */
+}
+
+.exclamation-circle .white {
+  color: white;
+  font-weight: bold;
+  font-size: 11px;
+}
+
+/* Menu List */
+.settings-menu {
+  margin-top: 10px;
+}
+
+.menu-item {
+  padding: 20px 0;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.menu-item.no-border {
+  border-bottom: none;
+}
+
+.menu-left {
+  align-items: center;
+}
+
+.menu-icon {
+  margin-right: 16px;
+}
+
+.menu-icon-custom {
+  width: 24px;
+  height: 24px;
+  border: 1.5px solid #374151;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+}
+
+.menu-icon-custom span {
+  font-size: 14px;
+  color: #374151;
+}
+
+.text-bold-menu {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.badge-new-small {
+  background-color: #EF4444;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 12px;
+}
