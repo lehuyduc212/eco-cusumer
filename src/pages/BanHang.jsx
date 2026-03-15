@@ -50,7 +50,8 @@ import {
   Target,
   ChevronLeft,
   BarChart3,
-  FileBarChart
+  FileBarChart,
+  Gift
 } from 'lucide-react';
 
 // --- TAX RATES ---
@@ -742,6 +743,90 @@ const BanHang = () => {
     setAiState(AI_STATE.DONE);
   };
 
+  const handleDynamicWrapping = async () => {
+    if (activeCart.length === 0) {
+      addStep("Dạ, giỏ hàng đang trống. Anh/Chị vui lòng chọn sản phẩm trước khi yêu cầu đóng giỏ quà nhé!", 'result', 'info');
+      return setAiState(AI_STATE.DONE);
+    }
+
+    setAiState(AI_STATE.PROCESSING);
+    addStep("Đang phân tích giỏ hàng để tối ưu quy cách đóng gói...");
+    await delay(1200);
+    updateLastStep('done');
+
+    const fruitItems = activeCart.filter(item => item.category === "Thực phẩm tươi" || item.category === "Lương thực");
+    const giftItems = activeCart.filter(item => item.category === "Bánh kẹo" || item.category === "Gia vị");
+    
+    addStep(
+      <div className="dynamic-wrap-card premium-glass fade-in">
+         <div className="opt-header">
+            <Sparkles size={16} className="text-amber-500" />
+            <span>Trí tuệ Bán hàng AI: Tối ưu Giỏ quà</span>
+         </div>
+         <div className="opt-content mt-2">
+            <p>Dạ em nhận lệnh! Em sẽ giúp mình đóng <b>{activeCart.length} mặt hàng</b> này thành giỏ quà chuyên nghiệp.</p>
+            <div className="opt-advice bg-blue-50/50 p-3 rounded-xl mt-3 border border-blue-100">
+               <p className="text-[12px] text-blue-800 leading-normal">
+                 💡 <b>Mẹo tối ưu:</b> Nếu lên đơn là "Dịch vụ giỏ quà", mình sẽ chịu <b>7.5% thuế</b> trên toàn bộ giá trị. 
+                 Em sẽ tách riêng: <b>Hàng hóa (1.5%)</b> + <b>Phí đóng gói (7.5%)</b> để mình đóng thuế ít nhất nha!
+               </p>
+            </div>
+            <div className="opt-compare mt-3">
+               <div className="compare-item">
+                  <small>Thuế cũ (7.5%)</small>
+                  <strong className="text-red-500">{(activeCart.reduce((sum, item) => sum + (item.price * item.quantity), 0) * 0.075).toLocaleString()}₫</strong>
+               </div>
+               <ArrowRight size={14} className="opacity-40" />
+               <div className="compare-item">
+                  <small>Thuế sau Tối ưu</small>
+                  <strong className="text-green-600">{(activeCart.reduce((sum, item) => sum + (item.price * item.quantity * 0.015), 0) + (80000 * 0.075)).toLocaleString()}₫</strong>
+               </div>
+            </div>
+         </div>
+         <div className="opt-actions-row mt-4">
+            <button className="opt-secondary-btn" onClick={() => setAiState(AI_STATE.DONE)}>Để sau</button>
+            <button className="opt-apply-btn flex-1" onClick={() => executeDynamicWrap()}>
+               <Gift size={14} /> Chốt Giỏ quà Tối ưu
+            </button>
+         </div>
+      </div>, 'result'
+    );
+    setAiState(AI_STATE.DONE);
+  };
+
+  const executeDynamicWrap = async () => {
+    setAiState(AI_STATE.PROCESSING);
+    addStep("Đang tạo nghiệp vụ đóng gói & áp mã thuế lẻ...");
+    await delay(1000);
+    
+    // Add Packaging Fee (Service 7.5%)
+    const packagingFee = {
+      id: `fee-${Date.now()}`,
+      name: "Phí đóng gói & Giỏ quà linh hoạt",
+      price: 80000,
+      quantity: 1,
+      taxCategory: 'SERVICE'
+    };
+    
+    setActiveCart(prev => [...prev, packagingFee]);
+    
+    setSessionHistory(prev => [{
+      timestamp: new Date().toLocaleTimeString(),
+      action: 'TỐI ƯU GIỎ QUÀ',
+      details: 'Chuyển đổi -> Hàng lẻ (1.5%) + Phí đóng gói (7.5%)'
+    }, ...prev]);
+
+    updateLastStep('done');
+    addStep(
+      <div className="tax-optimization-success premium-glass fade-in">
+         <CheckCircle2 size={24} className="text-green-500" />
+         <h4>Đã chuyển đổi thành Giỏ quà Tối ưu!</h4>
+         <p>Hệ thống đã tự động bóc tách doanh thu hàng hóa và dịch vụ để kê khai mức thuế thấp nhất cho Anh/Chị.</p>
+      </div>, 'result'
+    );
+    setAiState(AI_STATE.DONE);
+  };
+
   const removeCartItem = (id) => {
     setActiveCart(prev => prev.filter(item => item.id !== id));
     setCartCount(prev => Math.max(0, prev - 1));
@@ -1058,6 +1143,10 @@ const BanHang = () => {
        }
 
        return handleGlobalReporting();
+    }
+
+    if (lowerText.includes('gói quà') || lowerText.includes('giỏ quà') || lowerText.includes('đóng giỏ')) {
+       return handleDynamicWrapping();
     }
 
     if (lowerText.includes('in hoá đơn') || lowerText.includes('xuất hoá đơn') || lowerText.includes('in phiếu')) {
