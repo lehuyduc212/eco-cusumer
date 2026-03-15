@@ -373,6 +373,98 @@ const BanHang = () => {
     setLastActionType('NONE');
   };
 
+  const renderStrategicDashboard = () => {
+    return (
+      <div className="strategic-dashboard fade-in">
+        <div className="dashboard-title-area">
+          <small className="text-blue-600 font-bold uppercase tracking-widest">Định hướng chiến lược</small>
+          <h3>Gợi ý hành động hôm nay</h3>
+          <p>Dựa trên dữ liệu tồn kho & xu hướng thị trường</p>
+        </div>
+
+        <div className="strategic-grid">
+          {/* Tile 1: Clearance */}
+          <div className="strategic-tile tile-warning" onClick={() => simulateProcessing("Lên kế hoạch xả kho Mì Hảo Hảo")}>
+            <div className="tile-icon bg-red-50 text-red-600"><TrendingDown size={18} /></div>
+            <div className="tile-label">Clear tồn kho</div>
+            <div className="tile-value">Mì Hảo Hảo (Còn 150 thùng)</div>
+            <div className="tile-action"><Zap size={10} /> Chạy khuyến mãi 15%</div>
+          </div>
+
+          {/* Tile 2: Best Seller */}
+          <div className="strategic-tile tile-success" onClick={() => simulateProcessing("Tăng hiển thị cho Táo Envy")}>
+            <div className="tile-icon bg-green-50 text-green-600"><TrendingUp size={18} /></div>
+            <div className="tile-label">Bán thêm</div>
+            <div className="tile-value">Táo Envy đang HOT</div>
+            <div className="tile-action"><Plus size={10} /> Đặt ở kệ trung tâm</div>
+          </div>
+
+          {/* Tile 3: Predictions */}
+          <div className="strategic-tile tile-info" onClick={() => handleQuickStockEntry()}>
+            <div className="tile-icon bg-blue-50 text-blue-600"><Calendar size={18} /></div>
+            <div className="tile-label">Dự đoán nhập</div>
+            <div className="tile-value">Nho mẫu đơn (Hết sau 2 ngày)</div>
+            <div className="tile-action"><Truck size={10} /> Gợi ý nhập: +20kg</div>
+          </div>
+
+          {/* Tile 4: Alerts */}
+          <div className="strategic-tile tile-amber" onClick={() => handleInventoryReport()}>
+            <div className="tile-icon bg-amber-50 text-amber-600"><AlertTriangle size={18} /></div>
+            <div className="tile-label">Cảnh báo</div>
+            <div className="tile-value">Snack O'star đã hết hàng</div>
+            <div className="tile-action"><Settings size={10} /> Xử lý ngay</div>
+          </div>
+        </div>
+
+        {/* Voucher Section */}
+        <div className="voucher-card-premium" onClick={() => simulateProcessing("Dùng voucher nhập hàng sữa")}>
+          <div className="voucher-glow"></div>
+          <div className="v-label">Ưu đãi nhà phân phối</div>
+          <div className="v-title">Voucher GIẢM 20%</div>
+          <div className="v-desc">Áp dụng cho đơn nhập Sữa TH True Milk khi kho dưới 10 thùng.</div>
+          <button className="v-btn">Xem chi tiết & Dùng ngay</button>
+        </div>
+
+        {/* Strategic Timeline */}
+        <div className="strategic-timeline-box">
+          <div className="timeline-header">
+            <Clock size={16} className="text-blue-500" />
+            <span>Timeline hành động chiến lược</span>
+          </div>
+          <div className="timeline-v-list">
+            <div className="timeline-v-item">
+              <div className="tm-marker active"></div>
+              <div className="tm-content">
+                <b>08:00 - Kiểm kho & Nhập hàng</b>
+                <span>Ưu tiên nhập các mặt hàng dự báo hết trong 48h tới.</span>
+              </div>
+            </div>
+            <div className="timeline-v-item">
+              <div className="tm-marker"></div>
+              <div className="tm-content">
+                <b>11:30 - Tiếp đón cao điểm</b>
+                <span>Chuẩn bị sẵn 50 giỏ quà táo mẫu đơn cho khách văn phòng.</span>
+              </div>
+            </div>
+            <div className="timeline-v-item">
+              <div className="tm-marker"></div>
+              <div className="tm-content">
+                <b>16:00 - Tối ưu tồn cuối ngày</b>
+                <span>Cân nhắc giảm giá 10% các mặt hàng tươi sống còn dư.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="session-start-ctas mt-6">
+           <button className="start-cta-btn" onClick={() => handleMicClick()}>
+              <Mic size={18} /> Bán hàng bằng giọng nói
+           </button>
+        </div>
+      </div>
+    );
+  };
+
   const handleConfirmFinalReset = async () => {
     setAiState(AI_STATE.PROCESSING);
     addStep("Đang đóng phiên giao diện và lưu trữ hồ sơ...");
@@ -382,30 +474,7 @@ const BanHang = () => {
     setProcessSteps([]); // Clear all previous steps for the new session
     setAiState(AI_STATE.DONE);
     
-    addStep(
-      <div className="new-session-welcome fade-in">
-         <div className="welcome-header">
-            <Sparkles size={24} className="text-blue-500" />
-            <h3>Phiên làm việc mới</h3>
-         </div>
-         <p>Em đã sẵn sàng! Anh/Chị muốn thực hiện nghiệp vụ gì tiếp theo ạ?</p>
-         <div className="session-start-ctas mt-4">
-            <button className="start-cta-btn" onClick={() => handleMicClick()}>
-               <Mic size={18} /> Bán hàng bằng giọng nói
-            </button>
-            <div className="cta-grid-2">
-               <button className="start-cta-sub" onClick={() => handleInventoryReport()}>
-                  <Database size={14} /> Kiểm kho
-               </button>
-               <button className="start-cta-sub" onClick={() => addStep("Tính năng báo cáo đang được tải...", 'done')}>
-                  <BarChart2 size={14} /> Báo cáo
-               </button>
-            </div>
-         </div>
-      </div>,
-      'result',
-      'welcome'
-    );
+    addStep(renderStrategicDashboard(), 'result', 'dashboard');
   };
 
   const handleManualReset = async () => {

@@ -4208,6 +4208,220 @@ body.ai-expanded {
   margin-top: 2px;
 }
 
+/* --- AI STRATEGIC DASHBOARD (Phase 29) --- */
+.strategic-dashboard {
+  padding: 10px 4px;
+  animation: boardFadeIn 0.8s ease-out;
+}
+
+@keyframes boardFadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dashboard-title-area {
+  margin-bottom: 24px;
+}
+
+.dashboard-title-area h3 {
+  font-size: 22px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #1E293B, #334155);
+  -webkit-background-clip: text;
+  color: transparent;
+  margin: 0;
+}
+
+.dashboard-title-area p {
+  font-size: 14px;
+  color: #64748B;
+  margin-top: 4px;
+}
+
+.strategic-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.strategic-tile {
+  background: white;
+  border-radius: 20px;
+  padding: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+  transition: all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  position: relative;
+  overflow: hidden;
+}
+
+.strategic-tile:active {
+  transform: scale(0.97);
+}
+
+.tile-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.tile-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #94A3B8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tile-value {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1E293B;
+  margin-top: 4px;
+  line-height: 1.3;
+}
+
+.tile-action {
+  font-size: 11px;
+  color: #3B82F6;
+  font-weight: 600;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Alert Variations */
+.tile-warning { border-left: 4px solid #EF4444; }
+.tile-success { border-left: 4px solid #10B981; }
+.tile-info { border-left: 4px solid #3B82F6; }
+.tile-amber { border-left: 4px solid #F59E0B; }
+
+/* Dashboard Timeline */
+.strategic-timeline-box {
+  background: #F8FAFC;
+  border-radius: 24px;
+  padding: 20px;
+  margin-top: 20px;
+  border: 1px solid #F1F5F9;
+}
+
+.timeline-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  font-weight: 700;
+  color: #334155;
+}
+
+.timeline-v-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  padding-left: 10px;
+}
+
+.timeline-v-list::before {
+  content: '';
+  position: absolute;
+  left: 14px;
+  top: 5px;
+  bottom: 5px;
+  width: 1px;
+  background: #E2E8F0;
+}
+
+.timeline-v-item {
+  display: flex;
+  gap: 16px;
+  position: relative;
+}
+
+.tm-marker {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #CBD5E1;
+  border: 2px solid white;
+  z-index: 2;
+  margin-top: 6px;
+  box-shadow: 0 0 0 4px #F1F5F9;
+}
+
+.tm-marker.active {
+  background: #3B82F6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+}
+
+.tm-content b {
+  display: block;
+  font-size: 13px;
+  color: #1E293B;
+}
+
+.tm-content span {
+  font-size: 12px;
+  color: #64748B;
+}
+
+/* Voucher Card */
+.voucher-card-premium {
+  background: linear-gradient(135deg, #FF6B6B, #EE5253);
+  border-radius: 20px;
+  padding: 16px;
+  color: white;
+  margin-top: 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(238, 82, 83, 0.3);
+}
+
+.voucher-glow {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 100px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.2);
+  filter: blur(30px);
+  border-radius: 50%;
+}
+
+.v-label {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.v-title {
+  font-size: 18px;
+  font-weight: 800;
+  margin: 4px 0;
+}
+
+.v-desc {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.v-btn {
+  background: white;
+  color: #EE5253;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-top: 12px;
+}
+
 /* --- NEW SESSION WELCOME CARD --- */
 .new-session-welcome {
   background: white;
