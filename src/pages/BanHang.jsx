@@ -83,15 +83,45 @@ const MOCK_DB = [
   { id: 24, name: "Pin Duracell AA", emoji: "🔋", stock: 4, price: 45000, category: "Gia dụng", keywords: ["pin", "duracell"], salesTrend: -5, lastRestocked: '2024-02-15', taxCategory: 'RETAIL' },
   { id: 30, name: "Trà xanh Không Độ", emoji: "🍃", stock: 2, price: 10000, category: "Nước ngọt", keywords: ["không độ", "trà xanh"], salesTrend: 55, lastRestocked: '2024-03-14', taxCategory: 'RETAIL' },
 
-  // Special Combo Items for Tax Optimization Mime
+  { 
+    id: 51, 
+    name: "Táo Envy 1kg", 
+    emoji: "🍎", 
+    stock: 50, 
+    price: 120000, 
+    category: "Thực phẩm tươi", 
+    keywords: ["táo", "envy", "táo đỏ"], 
+    taxCategory: 'RETAIL' 
+  },
+  { 
+    id: 52, 
+    name: "Nho mẫu đơn 500g", 
+    emoji: "🍇", 
+    stock: 30, 
+    price: 250000, 
+    category: "Thực phẩm tươi", 
+    keywords: ["nho", "mẫu đơn", "nho xanh"], 
+    taxCategory: 'RETAIL' 
+  },
+  { 
+    id: 53, 
+    name: "Phí dịch vụ & Gói quà", 
+    emoji: "🎀", 
+    stock: 999, 
+    price: 80000, 
+    category: "Dịch vụ", 
+    keywords: ["phí đóng gói", "công gói", "giỏ quà", "gói quà"], 
+    taxCategory: 'SERVICE' 
+  },
+  // Previous Combo Items now referenced as individual entries
   { 
     id: 50, 
-    name: "Giỏ quà Trái cây", 
+    name: "Giỏ quà Trái cây (Sẵn có)", 
     emoji: "🧺", 
     stock: 20, 
     price: 450000, 
     category: "Combo Quà", 
-    keywords: ["giỏ quà", "basket", "gift"], 
+    keywords: ["giỏ quà sẵn", "giỏ sẵn"], 
     taxCategory: 'SERVICE', 
     comboItems: [
       { id: 51, name: "Táo Envy 1kg", price: 120000, taxCategory: 'RETAIL' },
@@ -99,22 +129,6 @@ const MOCK_DB = [
       { id: 53, name: "Phí dịch vụ & Gói quà", price: 80000, taxCategory: 'SERVICE' }
     ]
   },
-  { 
-    id: 60, 
-    name: "Combo Gia vị 01", 
-    emoji: "🧂", 
-    stock: 50, 
-    price: 150000, 
-    category: "Combo Gia vị", 
-    keywords: ["combo gia vị", "gói gia vị"], 
-    taxCategory: 'SERVICE',
-    comboItems: [
-      { id: 2, name: "Dầu Simply 1L", price: 65000, taxCategory: 'RETAIL' },
-      { id: 4, name: "Nước mắm Nam Ngư", price: 42000, taxCategory: 'RETAIL' },
-      { id: 11, name: "Tương ớt Chinsu", price: 15000, taxCategory: 'RETAIL' },
-      { id: 61, name: "Túi quà & Công đóng gói", price: 28000, taxCategory: 'SERVICE' }
-    ]
-  }
 ];
 
 const NGHIEP_VU_ITEMS = [
@@ -285,37 +299,38 @@ const BanHang = () => {
   const parseVietnameseQuantity = (text) => {
     const lower = text.toLowerCase();
     
-    // 1. Direct Digit check
+    // 1. Digital + Unit (e.g. 3kg, 5 cân)
+    const unitMatch = lower.match(/(\d+)\s*(kg|cân|g|l|hộp|quả|trứng|chai)/i);
+    if (unitMatch) return parseInt(unitMatch[1]);
+
+    // 2. Direct Digit check
     const digitMatch = lower.match(/\d+/);
     if (digitMatch) return parseInt(digitMatch[0]);
 
-    // 2. Word mapping
+    // 3. Word mapping for Vietnamese numbers
     const wordMap = {
-      'một': 1, 'hai': 2, 'ba': 3, 'bốn': 4, 'năm': 5, 
+      'không': 0, 'một': 1, 'hai': 2, 'ba': 3, 'bốn': 4, 'năm': 5, 
       'sáu': 6, 'bảy': 7, 'tám': 8, 'chín': 9, 'mười': 10,
-      'chục': 10, 'tá': 12, 'thùng': 24, 'két': 24, 'vỉ': 10
+      'chục': 10, 'tá': 12, 'thùng': 24, 'két': 24, 'vỉ': 10,
+      'nửa': 0.5
     };
 
-    // Check for "một thùng", "hai chục", etc.
-    let total = 0;
-    let foundNumber = false;
-    
-    // Check for specific complex phrases first
+    // Complex common phrases
     if (lower.includes('một thùng') || lower.includes('1 thùng')) return 24;
     if (lower.includes('hai thùng') || lower.includes('2 thùng')) return 48;
-    if (lower.includes('nửa thùng')) return 12;
-    if (lower.includes('nửa chục')) return 5;
     
-    // Simple lookups
+    // Check for "ba kg", "năm cân"
     for (const [word, val] of Object.entries(wordMap)) {
-      if (lower.includes(word)) {
-        total = val;
-        foundNumber = true;
-        break;
-      }
+      if (lower.includes(`${word} kg`) || lower.includes(`${word} cân`)) return val;
     }
 
-    return foundNumber ? total : null;
+    // Simple word lookup
+    for (const [word, val] of Object.entries(wordMap)) {
+      const regex = new RegExp(`(^|\\s)${word}(\\s|$)`, 'i');
+      if (regex.test(lower)) return val;
+    }
+
+    return null;
   };
 
   // --- Intents ---
@@ -1217,25 +1232,29 @@ const BanHang = () => {
     const normalizedText = lowerText.replace(/[.,!?]/g, " ");
     const consumedRanges = [];
 
-    // 1. Flatten all keywords with their items and sort by keyword length (longest first)
+    // 1. Index all searchable items (including nested items if any)
     const allKeywords = [];
     MOCK_DB.forEach(item => {
       item.keywords.forEach(kw => {
         allKeywords.push({ item, kw, length: kw.length });
       });
     });
+    // Ensure we also search for partial matches or names if no keyword matches
     allKeywords.sort((a, b) => b.length - a.length);
 
     // 2. Consume ranges for matches
     allKeywords.forEach(({ item, kw }) => {
-      // Find all occurrences of this keyword as a whole word
-      const regex = new RegExp(`(^|\\s)${kw}(\\s|$)`, 'gi');
+      // Find occurrences. We now use a more flexible word boundary for Vietnamese
+      const regex = new RegExp(`(^|\\s|\\d)${kw}(\\s|$|\\d)`, 'gi');
       let m;
       while ((m = regex.exec(normalizedText)) !== null) {
-        const startIdx = m.index;
-        const endIdx = m.index + m[0].length;
+        let startIdx = m.index;
+        let endIdx = m.index + m[0].length;
+        
+        // Adjust indices to remove potential surrounding chars from the match range
+        if (m[1]) startIdx += m[1].length;
+        if (m[2]) endIdx -= m[2].length;
 
-        // Check if this range overlaps with any already consumed range
         const isOverlapping = consumedRanges.some(range => 
           (startIdx >= range.start && startIdx < range.end) || 
           (endIdx > range.start && endIdx <= range.end)
@@ -1244,13 +1263,12 @@ const BanHang = () => {
         if (!isOverlapping) {
           consumedRanges.push({ start: startIdx, end: endIdx });
           
-          // QUANTITY ASSOCIATION: Scan context specifically around this match occurrence
-          const contextStart = Math.max(0, startIdx - 25);
-          const contextEnd = Math.min(lowerText.length, endIdx + 10);
+          // QUANTITY ASSOCIATION: Improved window context
+          const contextStart = Math.max(0, startIdx - 35);
+          const contextEnd = Math.min(lowerText.length, endIdx + 15);
           const window = lowerText.substring(contextStart, contextEnd);
           const qty = parseVietnameseQuantity(window);
 
-          // Add to detected if this item isn't already added (or update qty)
           const existing = detected.find(d => d.id === item.id);
           if (!existing) {
             detected.push({ ...item, detectedQty: qty });
@@ -1258,6 +1276,15 @@ const BanHang = () => {
         }
       }
     });
+
+    // 2b. Fallback: Check if item names are mentioned directly if no keywords triggered
+    if (detected.length === 0) {
+       MOCK_DB.forEach(item => {
+          if (normalizedText.includes(item.name.toLowerCase())) {
+             detected.push({ ...item, detectedQty: parseVietnameseQuantity(normalizedText) });
+          }
+       });
+    }
 
     // Sort detected items by their appearance in the text (optional but helps UX)
 
