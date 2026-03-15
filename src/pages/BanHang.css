@@ -4174,3 +4174,36 @@ body.ai-expanded {
 .finish-session-btn:hover svg {
   transform: rotate(180deg);
 }
+
+/* --- PHASE 25: TAX SEPARATION UI --- */
+
+.rc-tax-group {
+  padding: 8px 0;
+}
+
+.group-header {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 4px 8px;
+  border-radius: 6px;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.group-header.retail {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10B981;
+}
+
+.group-header.service {
+  background: rgba(245, 158, 11, 0.1);
+  color: #F59E0B;
+}
+
+.rc-tax-tag {
+  font-size: 10px;
+  opacity: 0.7;
+  font-style: italic;
+  margin-top: 2px;
+}

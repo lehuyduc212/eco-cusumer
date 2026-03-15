@@ -658,23 +658,42 @@ const BanHang = () => {
     }
 
     const totalAmount = newCart.reduce((sum, i) => sum + (i.price * (i.quantity || 1)), 0);
+    const retailItems = newCart.filter(i => i.taxCategory === 'RETAIL');
+    const serviceItems = newCart.filter(i => i.taxCategory === 'SERVICE');
 
     addStep(
       <div className="receipt-card">
         <div className="rc-header"><FileText size={16} /> Hoá đơn phiên làm việc</div>
         <div className="rc-body">
-           {newCart.map((item, idx) => (
-              <div className="rc-line-group" key={`final-${item.id}-${idx}`}>
-                <div className="rc-line">
-                  <span>{item.name} <strong>x{item.quantity || 1}</strong></span>
-                  <span>{(item.price * (item.quantity || 1)).toLocaleString()}₫</span>
-                </div>
-                <div className="rc-tax-tag">
-                   {item.taxCategory === 'SERVICE' ? 'Thuế Dịch vụ (7.5%)' : 'Thuế Bán lẻ (1.5%)'}
-                </div>
+           {retailItems.length > 0 && (
+              <div className="rc-tax-group">
+                <div className="group-header retail">HÀNG HÓA (Thuế lẻ 1.5%)</div>
+                {retailItems.map((item, idx) => (
+                  <div className="rc-line-group" key={`final-retail-${item.id}-${idx}`}>
+                    <div className="rc-line">
+                      <span>{item.name} <strong>x{item.quantity || 1}</strong></span>
+                      <span>{(item.price * (item.quantity || 1)).toLocaleString()}₫</span>
+                    </div>
+                  </div>
+                ))}
               </div>
-           ))}
-           <div className="rc-divider"></div>
+           )}
+
+           {serviceItems.length > 0 && (
+              <div className="rc-tax-group mt-3">
+                <div className="group-header service">DỊCH VỤ / ĐÓNG GÓI (Thuế 7.5%)</div>
+                {serviceItems.map((item, idx) => (
+                  <div className="rc-line-group" key={`final-service-${item.id}-${idx}`}>
+                    <div className="rc-line">
+                      <span>{item.name} <strong>x{item.quantity || 1}</strong></span>
+                      <span>{(item.price * (item.quantity || 1)).toLocaleString()}₫</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+           )}
+
+           <div className="rc-divider mt-4"></div>
            <div className="rc-total">
               <span>Tổng cộng ({newCart.reduce((sum, i) => sum + (i.quantity || 1), 0)} món)</span>
               <span className="total-val">{totalAmount.toLocaleString()}₫</span>
@@ -683,7 +702,15 @@ const BanHang = () => {
               <span>Ước tính thuế:</span>
               <strong>{newCart.reduce((sum, i) => sum + (i.price * i.quantity * TAX_RATES[i.taxCategory]), 0).toLocaleString()}₫</strong>
            </div>
-        </div>
+            <div className="rc-actions mt-4 flex gap-2">
+               <button className="rc-btn-secondary" onClick={() => handleManualReset()}>
+                  <RotateCcw size={14} /> Hủy đơn
+               </button>
+               <button className="rc-btn-primary" onClick={() => handleCheckoutIntent()}>
+                  <CheckCircle2 size={14} /> Thanh toán
+               </button>
+            </div>
+         </div>
       </div>,
       'result',
       'receipt'
@@ -863,6 +890,9 @@ const BanHang = () => {
     const totalAmount = updatedCart.reduce((sum, i) => sum + (i.price * (i.quantity || 1)), 0);
     const totalTax = updatedCart.reduce((sum, i) => sum + (i.price * i.quantity * TAX_RATES[i.taxCategory]), 0);
 
+    const retailItems = updatedCart.filter(i => i.taxCategory === 'RETAIL');
+    const serviceItems = updatedCart.filter(i => i.taxCategory === 'SERVICE');
+
     updateLastStep('done');
     addStep(
       <div className="tax-optimization-success premium-glass fade-in">
@@ -874,15 +904,35 @@ const BanHang = () => {
          
          <div className="receipt-card mini-receipt">
             <div className="rc-body">
-               {updatedCart.map((item, idx) => (
-                  <div className="rc-line-group" key={`opt-${item.id}-${idx}`}>
-                    <div className="rc-line">
-                      <span>{item.name} <strong>x{item.quantity || 1}</strong></span>
-                      <span>{(item.price * (item.quantity || 1)).toLocaleString()}₫</span>
-                    </div>
+               {retailItems.length > 0 && (
+                  <div className="rc-tax-group">
+                    <div className="group-header retail">HÀNG HÓA (Thuế lẻ 1.5%)</div>
+                    {retailItems.map((item, idx) => (
+                      <div className="rc-line-group" key={`opt-retail-${item.id}-${idx}`}>
+                        <div className="rc-line">
+                          <span>{item.name} <strong>x{item.quantity || 1}</strong></span>
+                          <span>{(item.price * (item.quantity || 1)).toLocaleString()}₫</span>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-               ))}
-               <div className="rc-divider"></div>
+               )}
+
+               {serviceItems.length > 0 && (
+                  <div className="rc-tax-group mt-3">
+                    <div className="group-header service">DỊCH VỤ / ĐÓNG GÓI (Thuế 7.5%)</div>
+                    {serviceItems.map((item, idx) => (
+                      <div className="rc-line-group" key={`opt-service-${item.id}-${idx}`}>
+                        <div className="rc-line">
+                          <span>{item.name} <strong>x{item.quantity || 1}</strong></span>
+                          <span>{(item.price * (item.quantity || 1)).toLocaleString()}₫</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+               )}
+
+               <div className="rc-divider mt-4"></div>
                <div className="rc-tax-summary tax-success-anim">
                   <span>Ước tính thuế tối ưu:</span>
                   <strong className="text-green-600">-{totalTax.toLocaleString()}₫</strong>
