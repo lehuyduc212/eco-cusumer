@@ -345,6 +345,15 @@ const BanHang = () => {
     // but clear the current active cart.
   };
 
+  const handleManualReset = async () => {
+    addStep("Đang hủy giỏ hàng hiện tại...");
+    await delay(800);
+    resetSession();
+    updateLastStep('done');
+    addStep("Dạ, em đã làm mới session. Giỏ hàng hiện đã trống.", 'result', 'success');
+    setAiState(AI_STATE.DONE);
+  };
+
   const handleCheckoutIntent = async () => {
     setAiState(AI_STATE.PROCESSING);
     setIsExpanded(true);
