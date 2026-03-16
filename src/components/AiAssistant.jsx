@@ -87,6 +87,7 @@ const AiAssistant = () => {
   const [pendingOrder, setPendingOrder] = useState([]);
   const [sessionHistory, setSessionHistory] = useState([]);
   const [showNudge, setShowNudge] = useState(true);
+  const [showReportNudge, setShowReportNudge] = useState(true);
   const [popupHeight, setPopupHeight] = useState(550);
   const [isMini, setIsMini] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -601,11 +602,29 @@ const AiAssistant = () => {
         {!isExpanded && (
           <div className="ai-trigger-container" style={{ position: 'absolute', bottom: '0', left: '50%', transform: 'translateX(-50%)' }}>
             {showNudge && (
-              <div className="ai-nudge fade-in-left">
-                <span className="nudge-text" onClick={() => { setIsExpanded(true); setShowNudge(false); }}>Kiểm kho ngay?</span>
-                <button className="nudge-close" onClick={() => setShowNudge(false)}><X size={10} /></button>
+              <div className="ai-nudge stock fade-in-left" onClick={(e) => { 
+                e.stopPropagation();
+                setIsExpanded(true); 
+                setShowNudge(false);
+                handleAction("Cho tôi đối soát kho");
+              }}>
+                <span className="nudge-text"><Package size={12} /> Kiểm kho ngay?</span>
+                <button className="nudge-close" onClick={(e) => { e.stopPropagation(); setShowNudge(false); }}><X size={10} /></button>
               </div>
             )}
+            
+            {showReportNudge && (
+              <div className="ai-nudge report orbit fade-in-up" onClick={(e) => {
+                e.stopPropagation();
+                setIsExpanded(true);
+                setShowReportNudge(false);
+                handleAction("Cho tôi xem báo cáo tổng hợp");
+              }}>
+                  <span className="nudge-text"><BarChart3 size={12} /> Báo cáo?</span>
+                  <button className="nudge-close" onClick={(e) => { e.stopPropagation(); setShowReportNudge(false); }}><X size={10} /></button>
+              </div>
+            )}
+
             <div className="ai-voice-trigger-compact" onClick={() => setIsExpanded(true)}>
                <div className="trigger-orb">
                   <div className="orb-ring"></div>

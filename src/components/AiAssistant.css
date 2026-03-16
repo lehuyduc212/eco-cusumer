@@ -1508,6 +1508,34 @@ body.ai-expanded {
   100% { transform: translate(0, 0) rotate(0deg) scale(1); }
 }
 
+@keyframes orbit {
+  0% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(-30px, -40px) scale(0.9); }
+  50% { transform: translate(40px, -60px) scale(1.1); }
+  75% { transform: translate(60px, -20px) scale(0.9); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+.ai-nudge.report.orbit {
+  position: absolute;
+  top: -80px;
+  right: 40px;
+  background: linear-gradient(135deg, #0056D2, #00B1FF);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(0, 86, 210, 0.3);
+  animation: orbit 12s linear infinite;
+  z-index: -1;
+  border: none;
+}
+
+.ai-nudge.report.orbit .nudge-text {
+  color: white;
+  font-size: 10px;
+}
+
 .nudge-text {
   font-size: 11px;
   font-weight: 700;
@@ -1710,3 +1738,4 @@ body.ai-expanded {
   font-weight: 700;
   padding: 4px 10px;
   border-radius: 20px;
+}
