@@ -1518,22 +1518,21 @@ body.ai-expanded {
 
 .ai-nudge.report.orbit {
   position: absolute;
-  top: -80px;
-  right: 40px;
-  background: linear-gradient(135deg, #0056D2, #00B1FF);
-  color: white;
-  padding: 6px 12px;
-  border-radius: 20px;
+  top: -45px;
+  right: 12px;
+  background: white;
+  color: #1E40AF;
+  padding: 8px 14px;
+  border-radius: 16px 16px 4px 16px;
   font-weight: 700;
-  box-shadow: 0 4px 15px rgba(0, 86, 210, 0.3);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.05);
   animation: orbit 12s linear infinite;
   z-index: -1;
-  border: none;
+  border: 1px solid #E2E8F0;
 }
 
 .ai-nudge.report.orbit .nudge-text {
-  color: white;
-  font-size: 10px;
+  color: #1E40AF;
 }
 
 .nudge-text {
