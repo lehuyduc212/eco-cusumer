@@ -110,7 +110,8 @@ const AiAssistant = () => {
     transcript,
     listening,
     resetTranscript,
-    browserSupportsSpeechRecognition
+    browserSupportsSpeechRecognition,
+    isMicrophoneAvailable
   } = useSpeechRecognition();
 
   // Background scroll lock
@@ -1974,14 +1975,16 @@ const AiAssistant = () => {
                        <div className="siri-glow-layer layer-core"></div>
                     </div>
                   ) : (
-                    <div className="voice-idle-state" onClick={handleMicClick}>
+                    <div className="voice-idle-state" onClick={() => { setAiState(AI_STATE.LISTENING); SpeechRecognition.startListening({ continuous: true, language: 'vi-VN' }); }}>
                        <Mic size={18} className="text-blue-500" />
-                       <span className="idle-text">Bấm để nói yêu cầu...</span>
+                       <span className="idle-text" style={{ color: isMicrophoneAvailable === false ? 'red' : 'inherit'}}>
+                         Bấm để nói yêu cầu... {isMicrophoneAvailable === false ? '(🚫)' : ''}
+                       </span>
                     </div>
                   )}
                   <div className="ai-controls-group">
                      {listening ? (
-                       <button className="ai-action-btn mic-btn pulse" onClick={() => handleMicClick()}>
+                       <button className="ai-action-btn mic-btn pulse" onClick={() => handleAction()}>
                           <Mic size={20} color="white" />
                        </button>
                      ) : (
