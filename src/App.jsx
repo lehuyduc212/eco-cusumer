@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Header from "./components/Header";
 import BottomNav from "./components/BottomNav";
 import NhapHang from "./pages/NhapHang";
@@ -8,13 +8,13 @@ import BanHang from "./pages/BanHang";
 import Khac from "./pages/Khac";
 import AiAssistant from "./components/AiAssistant";
 
-function App() {
+function AppContent() {
+  const location = useLocation();
   return (
-    <Router>
-      <div className="app-container">
-        <AiAssistant />
-        
-        <main className="content-area">
+    <div className="app-container">
+      <AiAssistant key={location.pathname} />
+      
+      <main className="content-area">
           <Routes>
             <Route path="/" element={<NhapHang />} />
             <Route path="/dich-vu" element={<DichVu />} />
@@ -24,8 +24,15 @@ function App() {
           </Routes>
         </main>
         
-        <BottomNav />
-      </div>
+      <BottomNav />
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 }
