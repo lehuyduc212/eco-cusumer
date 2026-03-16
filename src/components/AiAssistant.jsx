@@ -1858,7 +1858,7 @@ const AiAssistant = () => {
           </div>
         )}
 
-        <div className="ai-voice-trigger-compact" onClick={handleMicClick}>
+        <div className="ai-voice-trigger-compact" onClick={() => setIsExpanded(true)}>
            <div className="trigger-orb">
               <div className="orb-ring"></div>
               <Sparkles size={20} color="white" />
