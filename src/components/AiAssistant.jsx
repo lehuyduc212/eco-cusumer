@@ -864,6 +864,22 @@ const AiAssistant = () => {
     simulateProcessing(textToProcess);
   };
 
+  const handleMicClick = () => {
+    const isIOS = /ipad|iphone|ipod/.test(navigator.userAgent.toLowerCase()) && !window.MSStream;
+    const isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+
+    // Apple explicitly blocks webkitSpeechRecognition in iOS Home Screen PWAs
+    if (isIOS && isStandalone) {
+      setAiState(AI_STATE.IDLE);
+      addStep(`🚨 Lỗi Hệ điều hành iOS: Apple chặn tính năng Giọng Nói đối với các ứng dụng tải về Màn hình chính. Vui lòng mở lại trang web này bằng trình duyệt Safari gốc để ra lệnh bằng giọng nói!`, 'result', 'system');
+      return;
+    }
+
+    resetTranscript();
+    if (aiState !== AI_STATE.STOCK_ENTRY) setAiState(AI_STATE.LISTENING);
+    SpeechRecognition.startListening({ language: 'vi-VN' });
+  };
+
   const simulateProcessing = async (text, additive = false) => {
     const lowerText = text.toLowerCase();
     
@@ -1944,7 +1960,7 @@ const AiAssistant = () => {
                        <div className="siri-glow-layer layer-core"></div>
                     </div>
                   ) : (
-                    <div className="voice-idle-state" onClick={() => { resetTranscript(); if (aiState !== AI_STATE.STOCK_ENTRY) setAiState(AI_STATE.LISTENING); SpeechRecognition.startListening({ language: 'vi-VN' }); }}>
+                    <div className="voice-idle-state" onClick={handleMicClick}>
                        <Mic size={18} className="text-blue-500" />
                        <span className="idle-text">Bấm để nói yêu cầu...</span>
                     </div>
