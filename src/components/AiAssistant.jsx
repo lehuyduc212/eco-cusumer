@@ -1851,6 +1851,44 @@ const AiAssistant = () => {
     );
   };
 
+  const renderAiTriggers = () => {
+    if (!browserSupportsSpeechRecognition) return null;
+
+    return (
+      <div className="ai-trigger-container">
+        {showNudge && (
+          <div className="ai-nudge stock fade-in-left" onClick={(e) => { 
+            e.stopPropagation();
+            setIsExpanded(true); 
+            handleAction("Cho tôi đối soát kho");
+          }}>
+            <span className="nudge-text"><Package size={12} /> Kiểm kho ngay?</span>
+            <button className="nudge-close" onClick={(e) => { e.stopPropagation(); setShowNudge(false); }}><X size={10} /></button>
+          </div>
+        )}
+        
+        {showReportNudge && (
+          <div className="ai-nudge report orbit fade-in-up" onClick={(e) => {
+            e.stopPropagation();
+            setIsExpanded(true);
+            handleAction("Cho tôi xem báo cáo tổng hợp");
+          }}>
+              <span className="nudge-text"><BarChart3 size={12} /> Báo cáo?</span>
+              <button className="nudge-close" onClick={(e) => { e.stopPropagation(); setShowReportNudge(false); }}><X size={10} /></button>
+          </div>
+        )}
+
+        <div className="ai-voice-trigger-compact" onClick={handleMicClick}>
+           <div className="trigger-orb">
+              <div className="orb-ring"></div>
+              <Sparkles size={20} color="white" />
+           </div>
+           <span className="trigger-label-elegant">Trợ lý AI</span>
+        </div>
+      </div>
+    );
+  };
+
   if (!browserSupportsSpeechRecognition) {
     return null;
   }
