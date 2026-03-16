@@ -852,7 +852,6 @@ const AiAssistant = () => {
       // 1. Cập nhật giao diện lập tức
       resetTranscript();
       setAiState(AI_STATE.LISTENING);
-      setIsExpanded(true);
       
       // 2. Bắt buộc kích hoạt Nhận diện giọng nói ĐỒNG BỘ NGAY LẬP TỨC để giữ Token User Gesture của iOS
       SpeechRecognition.startListening({ continuous: true, language: 'vi-VN' });
@@ -872,6 +871,8 @@ const AiAssistant = () => {
       } catch (err) {
         console.warn("AudioContext init error:", err);
       }
+
+      setIsExpanded(true);
     }
   };
 
@@ -1976,39 +1977,8 @@ const AiAssistant = () => {
           </>
         )}
 
-        {!isExpanded && (
-          <div className="ai-trigger-container">
-            {showNudge && (
-              <div className="ai-nudge stock fade-in-left" onClick={(e) => { 
-                e.stopPropagation();
-                setIsExpanded(true); 
-                handleAction("Cho tôi đối soát kho");
-              }}>
-                <span className="nudge-text"><Package size={12} /> Kiểm kho ngay?</span>
-                <button className="nudge-close" onClick={(e) => { e.stopPropagation(); setShowNudge(false); }}><X size={10} /></button>
-              </div>
-            )}
-            
-            {showReportNudge && (
-              <div className="ai-nudge report orbit fade-in-up" onClick={(e) => {
-                e.stopPropagation();
-                setIsExpanded(true);
-                handleAction("Cho tôi xem báo cáo tổng hợp");
-              }}>
-                  <span className="nudge-text"><BarChart3 size={12} /> Báo cáo?</span>
-                  <button className="nudge-close" onClick={(e) => { e.stopPropagation(); setShowReportNudge(false); }}><X size={10} /></button>
-              </div>
-            )}
+        {!isExpanded && renderAiTriggers()}
 
-            <div className="ai-voice-trigger-compact" onClick={handleMicClick}>
-               <div className="trigger-orb">
-                  <div className="orb-ring"></div>
-                  <Sparkles size={20} color="white" />
-               </div>
-               <span className="trigger-label-elegant">Trợ lý AI</span>
-            </div>
-          </div>
-        )}
       </div>
     </>
   );
