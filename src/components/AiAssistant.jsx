@@ -168,37 +168,18 @@ const AiAssistant = () => {
 
   // Auto-trigger processing
   const [silenceTimer, setSilenceTimer] = useState(null);
-  const [watchdogTimer, setWatchdogTimer] = useState(null);
-
   useEffect(() => {
     if (listening && transcript) {
       if (silenceTimer) clearTimeout(silenceTimer);
-      if (watchdogTimer) clearTimeout(watchdogTimer);
-      
       const timer = setTimeout(() => {
-        if (aiState === AI_STATE.LISTENING || aiState === AI_STATE.STOCK_ENTRY) {
+        if (aiState === AI_STATE.LISTENING) {
           handleAction();
         }
-      }, 1500); 
+      }, 2000); // Tăng tốc độ phản hồi: đợi 2s sau khi ngừng nói
       setSilenceTimer(timer);
-    } else if (!listening && transcript && (aiState === AI_STATE.LISTENING || aiState === AI_STATE.STOCK_ENTRY)) {
-      handleAction();
-    } else if (listening && !transcript) {
-      // Bắt đầu đếm giờ Watchdog nếu đang nghe nhưng chưa có bất kì chữ nào (Lỗi Zalo/Messenger in-app browser)
-      if (watchdogTimer) clearTimeout(watchdogTimer);
-      const wTimer = setTimeout(() => {
-        if (listening && !transcript && (aiState === AI_STATE.LISTENING || aiState === AI_STATE.STOCK_ENTRY)) {
-          SpeechRecognition.stopListening();
-          setAiState(AI_STATE.IDLE);
-          addStep(`🚨 Lỗi Nhận Diện: Không nghe được âm thanh. Nếu bạn đang mở App trong Zalo/Messenger, trình duyệt ảo này thường chặn Micro. Vui lòng nhấn dấu 3 chấm góc phải và "Mở bằng Safari / Chrome" để có trải nghiệm tốt nhất!`, 'result', 'system');
-        }
-      }, 5000); // Đợi 5s, nếu vẫn mù tịt thì báo lỗi
-      setWatchdogTimer(wTimer);
     }
-    
     return () => {
       if (silenceTimer) clearTimeout(silenceTimer);
-      if (watchdogTimer) clearTimeout(watchdogTimer);
     };
   }, [transcript, listening]);
 
@@ -862,22 +843,6 @@ const AiAssistant = () => {
     }
 
     simulateProcessing(textToProcess);
-  };
-
-  const handleMicClick = () => {
-    const isIOS = /ipad|iphone|ipod/.test(navigator.userAgent.toLowerCase()) && !window.MSStream;
-    const isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
-
-    // Apple explicitly blocks webkitSpeechRecognition in iOS Home Screen PWAs
-    if (isIOS && isStandalone) {
-      setAiState(AI_STATE.IDLE);
-      addStep(`🚨 Lỗi Hệ điều hành iOS: Apple chặn tính năng Giọng Nói đối với các ứng dụng tải về Màn hình chính. Vui lòng mở lại trang web này bằng trình duyệt Safari gốc để ra lệnh bằng giọng nói!`, 'result', 'system');
-      return;
-    }
-
-    resetTranscript();
-    if (aiState !== AI_STATE.STOCK_ENTRY) setAiState(AI_STATE.LISTENING);
-    SpeechRecognition.startListening({ language: 'vi-VN' });
   };
 
   const simulateProcessing = async (text, additive = false) => {
@@ -1960,7 +1925,7 @@ const AiAssistant = () => {
                        <div className="siri-glow-layer layer-core"></div>
                     </div>
                   ) : (
-                    <div className="voice-idle-state" onClick={handleMicClick}>
+                    <div className="voice-idle-state" onClick={() => { resetTranscript(); if (aiState !== AI_STATE.STOCK_ENTRY) setAiState(AI_STATE.LISTENING); SpeechRecognition.startListening({ continuous: true, language: 'vi-VN' }); }}>
                        <Mic size={18} className="text-blue-500" />
                        <span className="idle-text">Bấm để nói yêu cầu...</span>
                     </div>
