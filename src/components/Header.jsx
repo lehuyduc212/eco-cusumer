@@ -5,11 +5,11 @@ const Header = () => {
   return (
     <header className="header">
       <div className="header-top">
-        <div className="time-status">16:56 <img></img></div>
+        {/* <div className="time-status">16:56 <img></img></div>
         <div className="network-status">
             <span>5G</span>
             <div className="battery">62</div>
-        </div>
+        </div> */}
       </div>
       <div className="header-main">
         <div className="search-bar">

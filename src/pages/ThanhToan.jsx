@@ -43,11 +43,11 @@ const ThanhToan = () => {
       {/* Same Header as Dich Vu */}
       <div className="tt-header">
         <div className="status-bar flex-between white-text">
-          <span className="time text-bold">16:56</span>
+          {/* <span className="time text-bold">16:56</span>
           <div className="status-icons flex-center">
             <span className="icon-placeholder text-xs">📶 5G</span>
             <span className="icon-placeholder text-xs">🔋 60</span>
-          </div>
+          </div> */}
         </div>
 
         <div className="tt-user-info flex-between">
@@ -56,11 +56,11 @@ const ThanhToan = () => {
               <span className="avatar-icon">E</span>
             </div>
             <div className="user-details">
-              <h3 className="user-name">GreenLow</h3>
-              <div className="user-exu flex-center">
+              <h3 className="user-name">Trái cây Tuyết Nhung</h3>
+              {/* <div className="user-exu flex-center">
                 <span className="exu-icon">E</span>
                 <span className="exu-balance">0 EXu</span>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="header-actions flex-center">

@@ -6,11 +6,13 @@ import DichVu from "./pages/DichVu";
 import ThanhToan from "./pages/ThanhToan";
 import BanHang from "./pages/BanHang";
 import Khac from "./pages/Khac";
+import AiAssistant from "./components/AiAssistant";
 
 function App() {
   return (
     <Router>
       <div className="app-container">
+        <AiAssistant />
         
         <main className="content-area">
           <Routes>

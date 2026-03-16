@@ -33,16 +33,16 @@ const Khac = () => {
       {/* Header with background curves */}
       <div className="kh-header-bg">
         <div className="status-bar flex-between text-dark">
-          <span className="time text-bold">4:26</span>
+          {/* <span className="time text-bold">4:26</span>
           <div className="status-icons flex-center">
             <span className="icon-placeholder text-xs">📶 5G</span>
             <span className="icon-placeholder text-xs">🔋 100</span>
-          </div>
+          </div> */}
         </div>
 
         <div className="kh-profile-info flex-between">
           <div className="profile-details">
-            <h2 className="user-name">GreenLow</h2>
+            <h2 className="user-name">Trái cây nhập Tuyết Nhung</h2>
             <p className="user-phone">038 696 8950</p>
           </div>
           <div className="profile-avatar-large flex-center">
