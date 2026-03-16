@@ -8,8 +8,8 @@
 .kh-header-bg {
   padding-bottom: 32px;
   position: relative;
-  /* Simulating the faint cream/pink curve on top left */
-  background: radial-gradient(circle at 10% 20%, #FFF5F0 0%, #FFFFFF 60%);
+  /* Very faint pastel wave overlapping white */
+  background: radial-gradient(circle at top right, #FFF1EE 0%, #FFFFFF 50%);
   min-height: 160px;
 }
 
@@ -57,10 +57,10 @@
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.06);
   border: 1px solid #F3F4F6;
-  padding-top: 20px;
+  padding-top: 24px;
   margin-bottom: 24px;
-  /* background curve in the card to match design slightly */
-  background-image: radial-gradient(circle at 90% 10%, #FFFDF5 0%, #FFFFFF 40%);
+  /* Faint background color matching image */
+  background-color: #FFFDF3;
 }
 
 .tracking-steps {
@@ -106,30 +106,6 @@
   margin-bottom: 24px;
 }
 
-.alert-content {
-  align-items: flex-start;
-  z-index: 2;
-}
-
-.alert-icon {
-  flex-shrink: 0;
-  margin-right: 12px;
-}
-
-.alert-text {
-  font-size: 13px;
-  color: #DC2626; /* solid red */
-  line-height: 1.4;
-  font-weight: 500;
-}
-
-.watermark-icon {
-  position: absolute;
-  right: -8px;
-  bottom: -10px;
-  z-index: 1;
-}
-
 /* Nguồn tiền */
 .funds-section {
   margin-bottom: 8px;
@@ -144,9 +120,9 @@
 }
 
 .wallet-card {
-  background-color: #E0F2FE; /* Light blue */
+  background-color: #DEF3FD; /* Exact light cyan */
   border-radius: 12px;
-  padding: 16px;
+  padding: 16px 20px;
 }
 
 .align-end {

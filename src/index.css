@@ -41,7 +41,7 @@ body {
 /* Layout Content Area */
 .content-area {
   flex: 1;
-  padding-bottom: 70px; /* Space for bottom nav */
+  padding-bottom: 110px; /* Space for bottom nav */
   overflow-y: auto; /* Internal scrolling */
 }
 
