@@ -845,6 +845,17 @@ const AiAssistant = () => {
     simulateProcessing(textToProcess);
   };
 
+  const handleMicClick = () => {
+    if (listening) {
+      SpeechRecognition.stopListening();
+    } else {
+      resetTranscript();
+      setAiState(AI_STATE.LISTENING);
+      setIsExpanded(true);
+      SpeechRecognition.startListening({ continuous: true, language: 'vi-VN' });
+    }
+  };
+
   const simulateProcessing = async (text, additive = false) => {
     const lowerText = text.toLowerCase();
     
@@ -1932,7 +1943,7 @@ const AiAssistant = () => {
                   )}
                   <div className="ai-controls-group">
                      {listening ? (
-                       <button className="ai-action-btn mic-btn pulse" onClick={() => handleAction()}>
+                       <button className="ai-action-btn mic-btn pulse" onClick={() => handleMicClick()}>
                           <Mic size={20} color="white" />
                        </button>
                      ) : (
@@ -1970,7 +1981,7 @@ const AiAssistant = () => {
               </div>
             )}
 
-            <div className="ai-voice-trigger-compact" onClick={() => setIsExpanded(true)}>
+            <div className="ai-voice-trigger-compact" onClick={handleMicClick}>
                <div className="trigger-orb">
                   <div className="orb-ring"></div>
                   <Sparkles size={20} color="white" />
