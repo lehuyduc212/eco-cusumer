@@ -168,22 +168,37 @@ const AiAssistant = () => {
 
   // Auto-trigger processing
   const [silenceTimer, setSilenceTimer] = useState(null);
+  const [watchdogTimer, setWatchdogTimer] = useState(null);
+
   useEffect(() => {
     if (listening && transcript) {
       if (silenceTimer) clearTimeout(silenceTimer);
+      if (watchdogTimer) clearTimeout(watchdogTimer);
+      
       const timer = setTimeout(() => {
         if (aiState === AI_STATE.LISTENING || aiState === AI_STATE.STOCK_ENTRY) {
           handleAction();
         }
-      }, 1500); // Rút ngắn lại 1.5s để App nhạy hơn trên Mobile
+      }, 1500); 
       setSilenceTimer(timer);
     } else if (!listening && transcript && (aiState === AI_STATE.LISTENING || aiState === AI_STATE.STOCK_ENTRY)) {
-      // Safari/Mobile thường sẽ tự động ngắt Mic (listening = false) ngay khi người dùng ngừng nói
-      // Bắt ngay sự kiện này để submit tự động mà không cần chờ timeout
       handleAction();
+    } else if (listening && !transcript) {
+      // Bắt đầu đếm giờ Watchdog nếu đang nghe nhưng chưa có bất kì chữ nào (Lỗi Zalo/Messenger in-app browser)
+      if (watchdogTimer) clearTimeout(watchdogTimer);
+      const wTimer = setTimeout(() => {
+        if (listening && !transcript && (aiState === AI_STATE.LISTENING || aiState === AI_STATE.STOCK_ENTRY)) {
+          SpeechRecognition.stopListening();
+          setAiState(AI_STATE.IDLE);
+          addStep(`🚨 Lỗi Nhận Diện: Không nghe được âm thanh. Nếu bạn đang mở App trong Zalo/Messenger, trình duyệt ảo này thường chặn Micro. Vui lòng nhấn dấu 3 chấm góc phải và "Mở bằng Safari / Chrome" để có trải nghiệm tốt nhất!`, 'result', 'system');
+        }
+      }, 5000); // Đợi 5s, nếu vẫn mù tịt thì báo lỗi
+      setWatchdogTimer(wTimer);
     }
+    
     return () => {
       if (silenceTimer) clearTimeout(silenceTimer);
+      if (watchdogTimer) clearTimeout(watchdogTimer);
     };
   }, [transcript, listening]);
 
