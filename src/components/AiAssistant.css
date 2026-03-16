@@ -916,53 +916,84 @@ body.ai-expanded {
 
 /* Compact Voice Trigger Orb */
 .ai-voice-trigger-compact {
-  position: relative; /* Change from absolute to separate from nudge in flex container */
+  position: relative;
   display: flex;
   align-items: center;
   gap: 12px;
-  background: white;
-  padding: 8px 24px 8px 8px; /* Wider padding */
-  min-width: 140px; /* Force extra width as requested */
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  padding: 6px 20px 6px 6px;
+  min-width: 130px;
   border-radius: 40px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1), 0 2px 5px rgba(0,0,0,0.05);
-  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.08),
+    0 4px 10px rgba(0, 0, 0, 0.05),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(0, 86, 210, 0.1);
   cursor: pointer;
-  pointer-events: auto; /* CRITICAL: Ensure clickability */
-  z-index: 9999999; /* Higher than any possible backdrop */
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  pointer-events: auto;
+  z-index: 9999999;
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .ai-voice-trigger-compact:hover {
-  transform: translateY(-5px) scale(1.05);
-  box-shadow: 0 15px 35px rgba(0, 86, 210, 0.2);
+  transform: translateY(-8px) scale(1.08);
+  background: white;
+  box-shadow: 
+    0 20px 40px rgba(0, 86, 210, 0.25),
+    0 10px 20px rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 86, 210, 0.3);
 }
 
 .trigger-orb {
-  width: 44px;
-  height: 44px;
+  width: 46px;
+  height: 46px;
   background: linear-gradient(135deg, #00B1FF 0%, #0056D2 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  box-shadow: 0 4px 12px rgba(0, 86, 210, 0.3);
+  box-shadow: 
+    0 6px 15px rgba(0, 86, 210, 0.4),
+    0 0 20px rgba(0, 177, 255, 0.3);
+  overflow: hidden;
+}
+
+.trigger-orb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom right, rgba(255,255,255,0.4), transparent);
+  opacity: 0.5;
 }
 
 .orb-ring {
   position: absolute;
-  inset: -4px;
+  inset: -6px;
   border-radius: 50%;
-  border: 2px solid #0056D2;
-  opacity: 0.15;
-  animation: orbRingPulse 2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid #00B1FF;
+  opacity: 0.3;
+  animation: orbRingPulse 2.5s infinite ease-out;
 }
 
 .trigger-label-elegant {
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 800;
   color: #1F2937;
-  letter-spacing: -0.2px;
+  letter-spacing: -0.3px;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #1F2937 0%, #4B5563 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.ai-voice-trigger-compact:hover .trigger-label-elegant {
+  letter-spacing: 0.2px;
+  transform: translateX(2px);
 }
 
 @keyframes orbRingPulse {
@@ -1475,13 +1506,13 @@ body.ai-expanded {
 /* AI Proactive Nudge */
 .ai-trigger-container {
   position: fixed;
-  bottom: 78px; /* Even closer to the 70px bottom bar */
-  right: 16px;
+  bottom: 72px; /* Closer to bottom */
+  right: 8px;   /* Closer to right edge */
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 8px;
-  z-index: 999999; /* Maximize visibility/interactivity */
+  gap: 6px;
+  z-index: 999999;
   pointer-events: none;
 }
 
@@ -1510,9 +1541,9 @@ body.ai-expanded {
 
 @keyframes orbit {
   0% { transform: translate(0, 0) scale(1); }
-  25% { transform: translate(-30px, -40px) scale(0.9); }
-  50% { transform: translate(40px, -60px) scale(1.1); }
-  75% { transform: translate(60px, -20px) scale(0.9); }
+  25% { transform: translate(-15px, -20px) scale(0.95); }
+  50% { transform: translate(20px, -30px) scale(1.05); }
+  75% { transform: translate(30px, -10px) scale(0.95); }
   100% { transform: translate(0, 0) scale(1); }
 }
 
