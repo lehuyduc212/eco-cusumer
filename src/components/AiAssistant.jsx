@@ -172,11 +172,15 @@ const AiAssistant = () => {
     if (listening && transcript) {
       if (silenceTimer) clearTimeout(silenceTimer);
       const timer = setTimeout(() => {
-        if (aiState === AI_STATE.LISTENING) {
+        if (aiState === AI_STATE.LISTENING || aiState === AI_STATE.STOCK_ENTRY) {
           handleAction();
         }
-      }, 2000); // Tăng tốc độ phản hồi: đợi 2s sau khi ngừng nói
+      }, 1500); // Rút ngắn lại 1.5s để App nhạy hơn trên Mobile
       setSilenceTimer(timer);
+    } else if (!listening && transcript && (aiState === AI_STATE.LISTENING || aiState === AI_STATE.STOCK_ENTRY)) {
+      // Safari/Mobile thường sẽ tự động ngắt Mic (listening = false) ngay khi người dùng ngừng nói
+      // Bắt ngay sự kiện này để submit tự động mà không cần chờ timeout
+      handleAction();
     }
     return () => {
       if (silenceTimer) clearTimeout(silenceTimer);
@@ -1925,7 +1929,7 @@ const AiAssistant = () => {
                        <div className="siri-glow-layer layer-core"></div>
                     </div>
                   ) : (
-                    <div className="voice-idle-state" onClick={() => { resetTranscript(); if (aiState !== AI_STATE.STOCK_ENTRY) setAiState(AI_STATE.LISTENING); SpeechRecognition.startListening({ continuous: true, language: 'vi-VN' }); }}>
+                    <div className="voice-idle-state" onClick={() => { resetTranscript(); if (aiState !== AI_STATE.STOCK_ENTRY) setAiState(AI_STATE.LISTENING); SpeechRecognition.startListening({ language: 'vi-VN' }); }}>
                        <Mic size={18} className="text-blue-500" />
                        <span className="idle-text">Bấm để nói yêu cầu...</span>
                     </div>
