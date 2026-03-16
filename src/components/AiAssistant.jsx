@@ -846,14 +846,40 @@ const AiAssistant = () => {
     simulateProcessing(textToProcess);
   };
 
-  const handleMicClick = () => {
+  const handleMicClick = async () => {
     if (listening) {
       SpeechRecognition.stopListening();
     } else {
       resetTranscript();
       setAiState(AI_STATE.LISTENING);
       setIsExpanded(true);
-      SpeechRecognition.startListening({ continuous: true, language: 'vi-VN' });
+      
+      // If React Speech Recognition detects a block, FORCE a manual permission prompt via native WebRTC
+      if (isMicrophoneAvailable === false) {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          // If they granted it this time, instantly drop the manual stream and trigger the real API
+          stream.getTracks().forEach(track => track.stop());
+          SpeechRecognition.startListening({ continuous: true, language: 'vi-VN' });
+        } catch (err) {
+          console.error("Bị iOS chặn Micro hoàn toàn:", err);
+          setAiState(AI_STATE.IDLE);
+          addStep(
+            <div className="strategic-consultant-card fade-in" style={{ borderColor: '#fca5a5', backgroundColor: '#fef2f2' }}>
+              <div className="consultant-badge bg-red-100 text-red-700 border-red-200 mb-2">🚫 Micro bị chặn bởi iPhone!</div>
+              <p className="text-sm text-red-700 mb-2">Do Safari đã lưu quyền <b>Từ chối</b> âm thanh trước đó. Vui lòng làm theo bước sau:</p>
+              <ol className="text-sm text-red-700 list-decimal pl-4">
+                <li>Vào <b>Cài đặt (Settings)</b> của máy &rarr; <b>Safari</b></li>
+                <li>Kéo xuống mục <b>Micro (Microphone)</b> &rarr; Chọn <b>Hỏi (Ask)</b> hoặc <b>Cho phép (Allow)</b></li>
+                <li>Quay lại App và thử lại.</li>
+              </ol>
+            </div>,
+            'done'
+          );
+        }
+      } else {
+        SpeechRecognition.startListening({ continuous: true, language: 'vi-VN' });
+      }
     }
   };
 
