@@ -1174,6 +1174,10 @@ body.ai-expanded {
 }
 
 /* Compact Voice Trigger Orb */
+.ai-voice-trigger-compact * {
+  pointer-events: none;
+}
+
 .ai-voice-trigger-compact {
   position: relative;
   display: flex;
@@ -1265,6 +1269,10 @@ body.ai-expanded {
     transform: scale(1.4);
     opacity: 0;
   }
+}
+
+.voice-idle-state * {
+  pointer-events: none;
 }
 
 /* Redesigning Idle State for better UX */

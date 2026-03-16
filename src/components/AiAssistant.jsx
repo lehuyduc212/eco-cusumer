@@ -849,10 +849,29 @@ const AiAssistant = () => {
     if (listening) {
       SpeechRecognition.stopListening();
     } else {
+      // 1. Cập nhật giao diện lập tức
       resetTranscript();
       setAiState(AI_STATE.LISTENING);
       setIsExpanded(true);
+      
+      // 2. Bắt buộc kích hoạt Nhận diện giọng nói ĐỒNG BỘ NGAY LẬP TỨC để giữ Token User Gesture của iOS
       SpeechRecognition.startListening({ continuous: true, language: 'vi-VN' });
+
+      // 3. Chạy ngầm Hack mở luồng Audio PWA WKWebView (Để cứu lỗi Mic câm do Safari ngủ đông AudioContext)
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) {
+          const ctx = new AudioCtx();
+          if (ctx.state === 'suspended') ctx.resume();
+        }
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+            stream.getTracks().forEach(t => t.stop());
+          }).catch(e => console.warn("Background audio hack bypassed:", e));
+        }
+      } catch (err) {
+        console.warn("AudioContext init error:", err);
+      }
     }
   };
 
@@ -1936,7 +1955,7 @@ const AiAssistant = () => {
                        <div className="siri-glow-layer layer-core"></div>
                     </div>
                   ) : (
-                    <div className="voice-idle-state" onClick={() => { resetTranscript(); if (aiState !== AI_STATE.STOCK_ENTRY) setAiState(AI_STATE.LISTENING); SpeechRecognition.startListening({ continuous: true, language: 'vi-VN' }); }}>
+                    <div className="voice-idle-state" onClick={handleMicClick}>
                        <Mic size={18} className="text-blue-500" />
                        <span className="idle-text">Bấm để nói yêu cầu...</span>
                     </div>
