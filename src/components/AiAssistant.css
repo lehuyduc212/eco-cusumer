@@ -15,7 +15,10 @@
 /* Prevent body scroll when backdrop is active */
 body.ai-expanded {
   overflow: hidden !important;
-  /* Removed height: 100vh to fix white screen bug reported by user */
+}
+
+body.ai-expanded .content-area {
+  overflow-y: hidden !important;
 }
 
 @keyframes fadeInBackdrop {

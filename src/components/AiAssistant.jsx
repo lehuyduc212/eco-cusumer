@@ -1968,7 +1968,7 @@ const AiAssistant = () => {
                  <div className="ai-suggestions slide-up">
                     {lastActionType === 'SALE_SUCCESS' && aiState === AI_STATE.DONE && (
                       <>
-                        <button className="cta-chip primary-cta" onClick={handleCheckoutIntent}><CreditCard size={15} /> Thanh toán</button>
+                        <button className="cta-chip primary-cta" onClick={() => handleCheckoutIntent()}><CreditCard size={15} /> Thanh toán</button>
                         <button className="cta-chip secondary-cta" onClick={handleQRIntent}><Smartphone size={15} /> QR VietQR</button>
                         <button className="cta-chip secondary-cta" onClick={handleEditOrder}><Settings size={15} /> Sửa đơn</button>
                       </>
