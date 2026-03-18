@@ -31,11 +31,11 @@ body.ai-expanded {
 /* Comet AI Assistant Wrapper */
 .ai-assistant-wrapper {
   position: fixed;
-  bottom: 8px;
-  /* 70 nav + 16 offset */
+  bottom: calc(82px + var(--safe-area-bottom)); /* 72px nav + 10px offset */
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
+  max-width: 480px;
   pointer-events: none;
   z-index: 99999;
   /* Higher than standard UI but below trigger */
@@ -49,7 +49,7 @@ body.ai-expanded {
 }
 
 .ai-assistant-wrapper.expanded {
-  bottom: 124px;
+  bottom: calc(82px + var(--safe-area-bottom));
   /* Float exactly above the bottom nav edge */
   transform: translateX(-50%) translateY(0);
   width: calc(100% - 16px);
@@ -2587,10 +2587,12 @@ body.ai-expanded {
 /* AI Proactive Nudge */
 .ai-trigger-container {
   position: fixed;
-  bottom: 124px;
-  /* Closer to bottom */
-  right: 8px;
-  /* Closer to right edge */
+  bottom: calc(80px + var(--safe-area-bottom)); /* 72px nav + 8px spacing, symmetrical with right: 8px */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  padding-right: 8px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -2617,7 +2619,7 @@ body.ai-expanded {
 .ai-nudge.orbit {
   position: absolute;
   top: -40px;
-  right: -20px;
+  right: 6px;
   background: white;
   padding: 6px 12px;
   border-radius: 20px;

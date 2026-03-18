@@ -10,6 +10,8 @@
   --white: #FFFFFF;
   --warning-yellow: #FACC15;
   --accent-orange: #F97316;
+  --safe-area-top: env(safe-area-inset-top);
+  --safe-area-bottom: env(safe-area-inset-bottom);
 }
 
 * {
@@ -27,21 +29,24 @@ body {
 
 /* Mobile App Container */
 .app-container {
-  max-width: 480px;
+  width: 100%;
+  max-width: 480px; /* Still keep it for desktop preview */
   margin: 0 auto;
-  height: 100dvh; /* Mobile screen height */
+  min-height: 100vh;
+  min-height: 100dvh;
   background-color: var(--bg-color);
   position: relative;
-  overflow: hidden; /* Hide all overflow outside phone frame */
+  overflow: hidden;
   box-shadow: 0 0 20px rgba(0,0,0,0.1);
   display: flex;
   flex-direction: column;
+  padding-top: var(--safe-area-top);
 }
 
 /* Layout Content Area */
 .content-area {
   flex: 1;
-  padding-bottom: 110px; /* Space for bottom nav */
+  padding-bottom: calc(90px + var(--safe-area-bottom)); /* Space for bottom nav */
   overflow-y: auto; /* Internal scrolling */
 }
 
