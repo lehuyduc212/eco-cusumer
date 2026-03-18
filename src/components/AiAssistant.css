@@ -31,7 +31,7 @@ body.ai-expanded {
 /* Comet AI Assistant Wrapper */
 .ai-assistant-wrapper {
   position: fixed;
-  bottom: calc(82px + var(--safe-area-bottom)); /* 72px nav + 10px offset */
+  bottom: calc(72px + var(--safe-area-bottom)); /* Sticks exactly to the top of the 72px tab bar */
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
@@ -1186,8 +1186,8 @@ body.ai-expanded {
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(12px) saturate(180%);
   -webkit-backdrop-filter: blur(12px) saturate(180%);
-  padding: 6px 20px 6px 6px;
-  min-width: 130px;
+  padding: 6px 16px 6px 6px; /* Reduced right padding from 20px to 16px for tighter alignment */
+  min-width: 120px;
   border-radius: 40px;
   box-shadow:
     0 10px 25px rgba(0, 0, 0, 0.08),
@@ -2586,13 +2586,9 @@ body.ai-expanded {
 
 /* AI Proactive Nudge */
 .ai-trigger-container {
-  position: fixed;
-  bottom: calc(80px + var(--safe-area-bottom)); /* 72px nav + 8px spacing, symmetrical with right: 8px */
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 480px;
-  padding-right: 8px;
+  position: relative; /* Changed from fixed to avoid double displacement inside a transformed parent */
+  padding-right: 8px; /* Tighter right margin as requested */
+  padding-bottom: 4px; /* Tiny gap from tab bar */
   display: flex;
   flex-direction: column;
   align-items: flex-end;
